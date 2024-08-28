@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>NOAA quarto simple - Customization</title>
+<title>Data Analysis and Visualisation with R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,29 +20,61 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/clipboard/clipboard.min.js"></script>
-<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="../site_libs/quarto-search/fuse.min.js"></script>
-<script src="../site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="../">
-<link href="../content/rendering.html" rel="next">
-<link href="../content/add-content.html" rel="prev">
-<link href="../images/favicon.ico" rel="icon">
-<script src="../site_libs/quarto-html/quarto.js"></script>
-<script src="../site_libs/quarto-html/popper.min.js"></script>
-<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="../site_libs/quarto-html/anchor.min.js"></script>
-<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./content/Session1.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -75,7 +107,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/customizing.html">Customizing</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Home</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -85,18 +117,19 @@ ul.task-list li input[type="checkbox"] {
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="../index.html" class="sidebar-logo-link">
-      <img src="https://raw.githubusercontent.com/nmfs-opensci/assets/main/logo/nmfs-opensci-logo3.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
-      </a>
-      <div class="sidebar-tools-main tools-wide">
-    <a href="https://nmfs-opensci.github.io" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-globe"></i></a>
-    <a href="https://github.com/nmfs-opensci" title="NMFS OpenSci" class="quarto-navigation-tool px-1" aria-label="NMFS OpenSci"><i class="bi bi-github"></i></a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Data Analysis and Visualisation with R</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://meier-flo.github.io/Data-Anal-Viz-2024/" title="Home" class="quarto-navigation-tool px-1" aria-label="Home"><i class="bi bi-house"></i></a>
+    <a href="https://vbn.aau.dk/da/persons/fmeier" title="Florian Meier personal website" class="quarto-navigation-tool px-1" aria-label="Florian Meier personal website"><i class="bi bi-globe"></i></a>
+    <a href="https://github.com/meier-flo/Data-Anal-Viz-2024" title="Github page of the courses" class="quarto-navigation-tool px-1" aria-label="Github page of the courses"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
+    </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
@@ -107,43 +140,25 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link">
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/add-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Add content</span></a>
+  <a href="./content/Session1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session1:Getting to know R and RStudio</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/customizing.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Customizing</span></a>
+  <a href="./content/Session4SoMe.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session4:Collecting Social Media Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/rendering.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Rendering</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/rmarkdown.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">R Markdown files</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/code.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Code in your files</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/acknowledgements.html" class="sidebar-item-text sidebar-link">
+  <a href="./content/acknowledgements.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Acknowledgements</span></a>
   </div>
 </li>
@@ -157,17 +172,19 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#quarto-documentation" id="toc-quarto-documentation" class="nav-link active" data-scroll-target="#quarto-documentation">Quarto documentation</a></li>
-  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a></li>
+  <li><a href="#about-this-website" id="toc-about-this-website" class="nav-link active" data-scroll-target="#about-this-website">About this website</a></li>
+  <li><a href="#r-and-rstudio-set-up" id="toc-r-and-rstudio-set-up" class="nav-link" data-scroll-target="#r-and-rstudio-set-up">R and RStudio Set-up</a></li>
+  <li><a href="#some-general-tips" id="toc-some-general-tips" class="nav-link" data-scroll-target="#some-general-tips">Some general tips</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/nmfs-opensci/NOAA-quarto-simple/edit/main/content/customizing.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/nmfs-opensci/NOAA-quarto-simple/blob/main/content/customizing.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/nmfs-opensci/NOAA-quarto-simple/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/meier-flo/Data-Anal-Viz-2024/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/meier-flo/Data-Anal-Viz-2024/blob/main/index.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/meier-flo/Data-Anal-Viz-2024/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-body" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Customization</h1>
+<div class="quarto-title-block"><div><h1 class="title">Data Analysis and Visualisation with R</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Course Material for AAU Information Studies Fall 2024</p>
 </div>
 
 
@@ -182,20 +199,24 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="quarto-documentation" class="level2">
-<h2 class="anchored" data-anchor-id="quarto-documentation">Quarto documentation</h2>
-<p>Quarto allow many bells and whistles to make nice output. Read the documentation here <a href="https://quarto.org/docs/guide/">Quarto documentation</a>.</p>
+<p>A core element of the AAU Information Studies degree is learning about data analysis and visualization. To teach you these skills, we use the <a href="https://www.r-project.org/">statistical programming language R</a>. Specifically, we will use the <a href="https://www.tidyverse.org/">Tidyverse</a>, an opinionated collection of R packages that share an underlying design philosophy, grammar, and data structures.</p>
+<section id="about-this-website" class="level2">
+<h2 class="anchored" data-anchor-id="about-this-website">About this website</h2>
+<p>At AAU we use <a href="https://www.moodle.aau.dk/">Moodle</a> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <a href="https://www.moodle.aau.dk/course/view.php?id=51656">Research Methods in Information Studies</a> and <a href="https://www.moodle.aau.dk/course/view.php?id=51654">User Studies and Information Behaviour</a>. While this can be confusing, this website is thought to collect all <strong>R related</strong> teaching in one space and covers all aspects that happen in class. <mark>This means, this website is replacing <strong>course slides</strong>. Class preparation and reading material can be found on Moodle.</mark></p>
 </section>
-<section id="examples" class="level2">
-<h2 class="anchored" data-anchor-id="examples">Examples</h2>
-<p>Looking at other people’s Quarto code is a great way to figure out how to do stuff. Most will have a link to a GitHub repo where you can see the raw code. Look for a link to edit page or see source code. This will usually be on the right. Or look for the GitHub icon somewhere.</p>
+<section id="r-and-rstudio-set-up" class="level2">
+<h2 class="anchored" data-anchor-id="r-and-rstudio-set-up">R and RStudio Set-up</h2>
+<p>Chester Ismay and Albert Kim, the authors of <a href="https://moderndive.com/index.html"><em>Moderndive</em></a> an introductory book to Data Science using R and the Tiduverse, describe it like this: R is a programming language that runs computations, while RStudio is an integrated development environment (IDE) that provides an interface by adding many convenient features and tools. You need to install both parts to get everything to work. You can find the links <a href="https://posit.co/download/rstudio-desktop/">to download both from Posit’s website.</a> A detailed guide can also be found on the <a href="https://moderndive.com/1-getting-started.html">Moderndive website.</a></p>
+<p><img src="img/install.png" class="img-fluid"></p>
+</section>
+<section id="some-general-tips" class="level2">
+<h2 class="anchored" data-anchor-id="some-general-tips">Some general tips</h2>
 <ul>
-<li><a href="https://quarto.org/docs/gallery/">Quarto gallery</a></li>
-<li><a href="https://nmfs-openscapes.github.io/">nmfs-openscapes</a></li>
-<li><a href="https://thefaylab.github.io/lab-manual/">Faye lab manual</a></li>
-<li><a href="https://nmfs-opensci.github.io/quarto_titlepages/">quarto-titlepages</a> Note the link to edit is broken. Go to repo and look in <code>documentation</code> directory.</li>
+<li></li>
 </ul>
 
+
+<!-- -->
 
 </section>
 
@@ -394,6 +415,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -548,18 +620,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation">
+<nav class="page-navigation column-body">
   <div class="nav-page nav-page-previous">
-      <a href="../content/add-content.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Add content</span>
-      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/rendering.html" class="pagination-link">
-        <span class="nav-page-text">Rendering</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./content/Session1.html" class="pagination-link">
+        <span class="nav-page-text">Session1:Getting to know R and RStudio</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Analysis and Visualisation with R"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Course Material for AAU Information Studies Fall 2024"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">page-layout:</span><span class="co"> full</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>A core element of the AAU Information Studies degree is learning about data analysis and visualization. To teach you these skills, we use the <span class="co">[</span><span class="ot">statistical programming language R</span><span class="co">](https://www.r-project.org/)</span>. Specifically, we will use the <span class="co">[</span><span class="ot">Tidyverse</span><span class="co">](https://www.tidyverse.org/)</span>, an opinionated collection of R packages that share an underlying design philosophy, grammar, and data structures. </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## About this website</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>At AAU we use <span class="co">[</span><span class="ot">Moodle</span><span class="co">](https://www.moodle.aau.dk/)</span> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <span class="co">[</span><span class="ot">Research Methods in Information Studies</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51656)</span> and <span class="co">[</span><span class="ot">User Studies and Information Behaviour</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51654)</span>. While this can be confusing, this website is thought to collect all **R related** teaching in one space and covers all aspects that happen in class. &lt;mark&gt;This means, this website is replacing **course slides**. Class preparation and reading material can be found on Moodle.<span class="kw">&lt;/mark&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## R and RStudio Set-up</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>Chester Ismay and Albert Kim, the authors of <span class="co">[</span><span class="ot">*Moderndive*</span><span class="co">](https://moderndive.com/index.html)</span> an introductory book to Data Science using R and the Tiduverse, describe it like this: R is a programming language that runs computations, while RStudio is an integrated development environment (IDE) that provides an interface by adding many convenient features and tools. You need to install both parts to get everything to work. You can find the links <span class="co">[</span><span class="ot">to download both from Posit's website.</span><span class="co">](https://posit.co/download/rstudio-desktop/)</span> A detailed guide can also be found on the <span class="co">[</span><span class="ot">Moderndive website.</span><span class="co">](https://moderndive.com/1-getting-started.html)</span> </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/install.png)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Some general tips</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>NOAA quarto simple - Rendering</title>
+<title>Data Analysis and Visualisation with R - Session 1:Getting to know R and RStudio</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -29,9 +63,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../content/rmarkdown.html" rel="next">
-<link href="../content/customizing.html" rel="prev">
-<link href="../images/favicon.ico" rel="icon">
+<link href="../content/Session4SoMe.qmd" rel="next">
+<link href="../index.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -42,7 +75,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -75,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/rendering.html">Rendering</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/Session1.html">Session1:Getting to know R and RStudio</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -89,14 +122,15 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="../index.html" class="sidebar-logo-link">
-      <img src="https://raw.githubusercontent.com/nmfs-opensci/assets/main/logo/nmfs-opensci-logo3.png" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
-      </a>
-      <div class="sidebar-tools-main tools-wide">
-    <a href="https://nmfs-opensci.github.io" title="NMFS Open Science" class="quarto-navigation-tool px-1" aria-label="NMFS Open Science"><i class="bi bi-globe"></i></a>
-    <a href="https://github.com/nmfs-opensci" title="NMFS OpenSci" class="quarto-navigation-tool px-1" aria-label="NMFS OpenSci"><i class="bi bi-github"></i></a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Data Analysis and Visualisation with R</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://meier-flo.github.io/Data-Anal-Viz-2024/" title="Home" class="quarto-navigation-tool px-1" aria-label="Home"><i class="bi bi-house"></i></a>
+    <a href="https://vbn.aau.dk/da/persons/fmeier" title="Florian Meier personal website" class="quarto-navigation-tool px-1" aria-label="Florian Meier personal website"><i class="bi bi-globe"></i></a>
+    <a href="https://github.com/meier-flo/Data-Anal-Viz-2024" title="Github page of the courses" class="quarto-navigation-tool px-1" aria-label="Github page of the courses"><i class="bi bi-github"></i></a>
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
+    </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
         <div class="sidebar-search">
@@ -113,37 +147,19 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/add-content.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Add content</span></a>
+  <a href="../content/Session1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Session1:Getting to know R and RStudio</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/customizing.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Customizing</span></a>
+  <a href="../content/Session4SoMe.qmd" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Session4:Collecting Social Media Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../content/rendering.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Rendering</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/rmarkdown.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">R Markdown files</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/code.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Code in your files</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../content/acknowledgements.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/acknowledgements.qmd" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Acknowledgements</span></a>
   </div>
 </li>
@@ -157,18 +173,21 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#step-1.-make-sure-you-have-a-recent-rstudio" id="toc-step-1.-make-sure-you-have-a-recent-rstudio" class="nav-link active" data-scroll-target="#step-1.-make-sure-you-have-a-recent-rstudio">Step 1. Make sure you have a recent RStudio</a></li>
-  <li><a href="#step-2.-clone-and-create-rstudio-project" id="toc-step-2.-clone-and-create-rstudio-project" class="nav-link" data-scroll-target="#step-2.-clone-and-create-rstudio-project">Step 2. Clone and create RStudio project</a></li>
-  <li><a href="#step-3.-render-within-rstudio" id="toc-step-3.-render-within-rstudio" class="nav-link" data-scroll-target="#step-3.-render-within-rstudio">Step 3. Render within RStudio</a></li>
+  <li><a href="#r-basics" id="toc-r-basics" class="nav-link active" data-scroll-target="#r-basics">R basics</a></li>
+  <li><a href="#intalling-and-loading-packages" id="toc-intalling-and-loading-packages" class="nav-link" data-scroll-target="#intalling-and-loading-packages">Intalling and loading packages</a>
+  <ul class="collapse">
+  <li><a href="#let-them-eat-cake" id="toc-let-them-eat-cake" class="nav-link" data-scroll-target="#let-them-eat-cake">Let them eat cake</a></li>
+  </ul></li>
+  <li><a href="#dplyr-basics" id="toc-dplyr-basics" class="nav-link" data-scroll-target="#dplyr-basics">Dplyr basics</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/nmfs-opensci/NOAA-quarto-simple/edit/main/content/rendering.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/nmfs-opensci/NOAA-quarto-simple/blob/main/content/rendering.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/nmfs-opensci/NOAA-quarto-simple/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/meier-flo/Data-Anal-Viz-2024/edit/main/content/Session1.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/meier-flo/Data-Anal-Viz-2024/blob/main/content/Session1.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/meier-flo/Data-Anal-Viz-2024/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Rendering</h1>
+<div class="quarto-title-block"><div><h1 class="title">Session 1:Getting to know R and RStudio</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -183,21 +202,39 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>The repo includes a GitHub Action that will render (build) the website automatically when you make changes to the files. It will be pushed to the <code>gh-pages</code> branch.</p>
-<p>But when you are developing your content, you will want to render it locally.</p>
-<section id="step-1.-make-sure-you-have-a-recent-rstudio" class="level2">
-<h2 class="anchored" data-anchor-id="step-1.-make-sure-you-have-a-recent-rstudio">Step 1. Make sure you have a recent RStudio</h2>
-<p>Have you updated RStudio since about August 2022? No? Then update to a newer version of RStudio. In general, you want to keep RStudio updated and it is required to have a recent version to use Quarto.</p>
+<section id="r-basics" class="level2">
+<h2 class="anchored" data-anchor-id="r-basics">R basics</h2>
 </section>
-<section id="step-2.-clone-and-create-rstudio-project" class="level2">
-<h2 class="anchored" data-anchor-id="step-2.-clone-and-create-rstudio-project">Step 2. Clone and create RStudio project</h2>
-<p>First, clone the repo onto your local computer. How? You can click File &gt; New Project and then select “Version Control”. Paste in the url of the repository. That will clone the repo on to your local computer. When you make changes, you will need to push those up.</p>
+<section id="intalling-and-loading-packages" class="level2">
+<h2 class="anchored" data-anchor-id="intalling-and-loading-packages">Intalling and loading packages</h2>
+<p>Base R can easily be extended by additional functions, data and routines that are wrapped in so called <em>packages</em>. R has a large community that develops packages on a daily basis which makes the programming language so accessible and versatile. Packages can either be installed via the RStudio GUI or via the console/your R code. You use the function <code>install.packages()</code> and put in the name of the package. As mentioned earlier we will use the tidyverse. We also start with a packages that gives us access to a popular data set, the palmer penguins data. After installing the packages you also need to make them accessible. This you do by using the function <code>require()</code> or <code>library()</code>. Note that for this function</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"palmerpenguins"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="let-them-eat-cake" class="level3">
+<h3 class="anchored" data-anchor-id="let-them-eat-cake">Let them eat cake</h3>
+<p>We</p>
 </section>
-<section id="step-3.-render-within-rstudio" class="level2">
-<h2 class="anchored" data-anchor-id="step-3.-render-within-rstudio">Step 3. Render within RStudio</h2>
-<p>RStudio will recognize that this is a Quarto project by the presence of the <code>_quarto.yml</code> file and will see the “Build” tab. Click the “Render website” button to render to the <code>_site</code> folder.</p>
-<p><strong>Previewing:</strong> You can either click <code>index.html</code> in the <code>_site</code> folder and specify “preview in browser” or set up RStudio to preview to the viewer panel. To do the latter, go to Tools &gt; Global Options &gt; R Markdown. Then select “Show output preview in: Viewer panel”.</p>
+</section>
+<section id="dplyr-basics" class="level2">
+<h2 class="anchored" data-anchor-id="dplyr-basics">Dplyr basics</h2>
+<p>Now we get to know the verbs that are part of <code>dplyr</code>. We start with the <code>filter()</code> function and the different logical operators, and, or and comparisons with <code>is.na()</code>. We will aim at answering the following questions:</p>
+<ul>
+<li>Find all penguins that were found on island Dream</li>
+<li>Find all penguins that are heavier than 4 kg</li>
+<li>Find all penguins that are female and heavier than 4 kg</li>
+<li>Are there more male or female penguins that are heavier than 4kg?</li>
+<li>Find all penguins where the sex is not missing (NA)</li>
+</ul>
 
+
+<!-- -->
 
 </section>
 
@@ -396,6 +433,57 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+  const viewSource = window.document.getElementById('quarto-view-source') ||
+                     window.document.getElementById('quarto-code-tools-source');
+  if (viewSource) {
+    const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+    viewSource.addEventListener("click", function(e) {
+      if (sourceUrl) {
+        // rstudio viewer pane
+        if (/\bcapabilities=\b/.test(window.location)) {
+          window.open(sourceUrl);
+        } else {
+          window.location.href = sourceUrl;
+        }
+      } else {
+        const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+        modal.show();
+      }
+      return false;
+    });
+  }
+  function toggleCodeHandler(show) {
+    return function(e) {
+      const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+      for (let i=0; i<detailsSrc.length; i++) {
+        const details = detailsSrc[i].parentElement;
+        if (show) {
+          details.open = true;
+        } else {
+          details.removeAttribute("open");
+        }
+      }
+      const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+      const fromCls = show ? "hidden" : "unhidden";
+      const toCls = show ? "unhidden" : "hidden";
+      for (let i=0; i<cellCodeDivs.length; i++) {
+        const codeDiv = cellCodeDivs[i];
+        if (codeDiv.classList.contains(fromCls)) {
+          codeDiv.classList.remove(fromCls);
+          codeDiv.classList.add(toCls);
+        } 
+      }
+      return false;
+    }
+  }
+  const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+  if (hideAllCode) {
+    hideAllCode.addEventListener("click", toggleCodeHandler(false));
+  }
+  const showAllCode = window.document.getElementById("quarto-show-all-code");
+  if (showAllCode) {
+    showAllCode.addEventListener("click", toggleCodeHandler(true));
+  }
   function tippyHover(el, contentFn) {
     const config = {
       allowHTML: true,
@@ -552,16 +640,52 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../content/customizing.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Customizing</span>
+      <a href="../index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Home</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../content/rmarkdown.html" class="pagination-link">
-        <span class="nav-page-text">R Markdown files</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/Session4SoMe.qmd" class="pagination-link">
+        <span class="nav-page-text">Session4:Collecting Social Media Data</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
-</nav>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Session 1:Getting to know R and RStudio</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## R basics </span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Intalling and loading packages</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>Base R can easily be extended by additional functions, data and routines that are wrapped in so called *packages*. R has a large community that develops packages on a daily basis which makes the programming language so accessible and versatile. Packages can either be installed via the RStudio GUI or via the console/your R code. You use the function <span class="in">`install.packages()`</span> and put in the name of the package. As mentioned earlier we will use the tidyverse. We also start with a packages that gives us access to a popular data set, the palmer penguins data. After installing the packages you also need to make them accessible. This you do by using the function <span class="in">`require()`</span> or <span class="in">`library()`</span>. Note that for this function</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"palmerpenguins"</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="fu">### Let them eat cake</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>We </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dplyr basics</span></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>Now we get to know the verbs that are part of <span class="in">`dplyr`</span>. We start with the <span class="in">`filter()`</span> function and the different logical operators, and, or and comparisons with <span class="in">`is.na()`</span>. We will aim at answering the following questions: </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that were found on island Dream</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that are heavier than 4 kg</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that are female and heavier than 4 kg</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Are there more male or female penguins that are heavier than 4kg?</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins where the sex is not missing (NA)</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
