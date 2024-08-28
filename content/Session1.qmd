@@ -1,0 +1,36 @@
+---
+title: Session 1:Getting to know R and RStudio
+---
+
+## R basics 
+
+## Intalling and loading packages
+Base R can easily be extended by additional functions, data and routines that are wrapped in so called *packages*. R has a large community that develops packages on a daily basis which makes the programming language so accessible and versatile. Packages can either be installed via the RStudio GUI or via the console/your R code. You use the function `install.packages()` and put in the name of the package. As mentioned earlier we will use the tidyverse. We also start with a packages that gives us access to a popular data set, the palmer penguins data. After installing the packages you also need to make them accessible. This you do by using the function `require()` or `library()`. Note that for this function
+
+```{r,echo=TRUE,eval=FALSE}
+install.packages("tidyverse")
+install.packages("palmerpenguins")
+require(tidyverse)
+require(palmerpenguins)
+```
+
+
+### Let them eat cake
+We 
+
+```{r}
+
+```
+
+
+## Dplyr basics
+Now we get to know the verbs that are part of `dplyr`. We start with the `filter()` function and the different logical operators, and, or and comparisons with `is.na()`. We will aim at answering the following questions: 
+
+* Find all penguins that were found on island Dream
+* Find all penguins that are heavier than 4 kg
+* Find all penguins that are female and heavier than 4 kg
+* Are there more male or female penguins that are heavier than 4kg?
+* Find all penguins where the sex is not missing (NA)
+
+
+

@@ -1,0 +1,62 @@
+project: 
+  type: website
+
+website: 
+  page-navigation: true
+  title: "Data Analysis and Visualisation with R" 
+  site-url: "https://meier-flo.github.io/Data-Anal-Viz-2024/" 
+  repo-url: "https://github.com/meier-flo/Data-Anal-Viz-2024"
+  repo-actions: [edit, source, issue]
+  
+  page-footer:
+    right: "This page is built with [Quarto](https://quarto.org/)."
+    left: "&copy; CC-1.0"
+  
+  sidebar:
+    background: "#D9E3E4"
+    logo: ""
+    pinned: true
+    align: center
+    tools: 
+      - icon: house
+        href: https://meier-flo.github.io/Data-Anal-Viz-2024/
+        text: "Home"
+      - icon: globe
+        href: https://vbn.aau.dk/da/persons/fmeier
+        text: "Florian Meier personal website"
+      - icon: github
+        href: https://github.com/meier-flo/Data-Anal-Viz-2024
+        text: "Github page of the courses"
+
+    style: "docked"
+    search: true
+    collapse-level: 1
+    contents:
+      - href: index.qmd
+        text: Home
+      - href: content/Session1.qmd
+        text: Session1:Getting to know R and RStudio
+      - href: content/Session4SoMe.qmd
+        text: Session4:Collecting Social Media Data
+      - href: content/acknowledgements.qmd
+        text: Acknowledgements
+        
+format:
+  html:
+    code-fold: show  
+    code-tools: true
+    code-summary: "Show/Hide Code"
+    highlight-style: monokai
+    theme:
+      light: [cosmo, theme.scss] 
+      dark: [cosmo, theme-dark.scss]
+    code-copy: true
+    code-overflow: wrap
+    toc: true
+
+
+filters:
+  - include-files.lua
+  - quarto
+
+  
