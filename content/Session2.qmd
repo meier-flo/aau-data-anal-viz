@@ -2,9 +2,7 @@
 title: Part2:Collection, cleaning and transformation
 ---
 
-# Collection, cleaning and transformation part 2
-
-## XXXX 
+## TO BE DONE
 
 
 
