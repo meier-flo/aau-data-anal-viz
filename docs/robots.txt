@@ -1,1 +1,1 @@
-Sitemap: https://meier-flo.github.io/Data-Anal-Viz-2024/sitemap.xml
+Sitemap: https://meier-flo.github.io/aau-data-anal-viz/sitemap.xml

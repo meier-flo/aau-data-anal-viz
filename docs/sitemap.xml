@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://meier-flo.github.io/Data-Anal-Viz-2024/index.html</loc>
-    <lastmod>2024-08-28T18:52:24.118Z</lastmod>
+    <lastmod>2024-08-28T19:01:05.537Z</lastmod>
   </url>
   <url>
     <loc>https://meier-flo.github.io/Data-Anal-Viz-2024/content/Session1.html</loc>
@@ -11,5 +11,29 @@
   <url>
     <loc>https://meier-flo.github.io/Data-Anal-Viz-2024/about.html</loc>
     <lastmod>2024-08-28T18:45:43.893Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meier-flo.github.io/aau-data-anal-viz/index.html</loc>
+    <lastmod>2024-08-29T11:39:38.228Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meier-flo.github.io/aau-data-anal-viz/content/Session1.html</loc>
+    <lastmod>2024-08-29T10:55:35.346Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meier-flo.github.io/aau-data-anal-viz/content/Session2.html</loc>
+    <lastmod>2024-08-29T07:54:24.155Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meier-flo.github.io/aau-data-anal-viz/content/Session5.html</loc>
+    <lastmod>2024-08-29T10:50:11.456Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meier-flo.github.io/aau-data-anal-viz/content/Session4.html</loc>
+    <lastmod>2024-08-29T10:50:11.742Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meier-flo.github.io/aau-data-anal-viz/content/Session3.html</loc>
+    <lastmod>2024-08-29T10:50:12.041Z</lastmod>
   </url>
 </urlset>

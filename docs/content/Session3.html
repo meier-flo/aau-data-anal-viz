@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data Analysis and Visualisation with R</title>
+<title>Data Analysis and Visualisation with R - Data collection:crawling social media (Reddit)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -57,22 +57,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./content/Session1.html" rel="next">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../content/Session4.html" rel="next">
+<link href="../content/Session2.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -105,7 +106,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Home</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/Session3.html">Data collection:crawling social media</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -115,12 +116,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-center sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Data Analysis and Visualisation with R</a> 
+      <a href="../">Data Analysis and Visualisation with R</a> 
         <div class="sidebar-tools-main tools-wide">
     <a href="https://meier-flo.github.io/aau-data-anal-viz/" title="Home" class="quarto-navigation-tool px-1" aria-label="Home"><i class="bi bi-house"></i></a>
     <a href="https://vbn.aau.dk/da/persons/fmeier" title="Florian Meier personal website" class="quarto-navigation-tool px-1" aria-label="Florian Meier personal website"><i class="bi bi-globe"></i></a>
@@ -137,38 +138,38 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/Session1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">1.Part1:Collection, cleaning and transformation</span></a>
+  <a href="../content/Session1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part1:Collection, cleaning and transformation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/Session2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">2.Part2:Collection, cleaning and transformation</span></a>
+  <a href="../content/Session2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part2:Collection, cleaning and transformation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/Session3.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">3.Data collection:crawling social media</span></a>
+  <a href="../content/Session3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Data collection:crawling social media</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/Session4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">4.Data analysis:descriptive statistics &amp; visualisation</span></a>
+  <a href="../content/Session4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data analysis:descriptive statistics &amp; visualisation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/Session5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">5.Data analysis:log analysis</span></a>
+  <a href="../content/Session5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data analysis:log analysis</span></a>
   </div>
 </li>
     </ul>
@@ -181,19 +182,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#about-this-website" id="toc-about-this-website" class="nav-link active" data-scroll-target="#about-this-website">About this website</a></li>
-  <li><a href="#r-and-rstudio-set-up" id="toc-r-and-rstudio-set-up" class="nav-link" data-scroll-target="#r-and-rstudio-set-up">R and RStudio Set-up</a></li>
-  <li><a href="#some-general-tips" id="toc-some-general-tips" class="nav-link" data-scroll-target="#some-general-tips">Some general tips</a></li>
+  <li><a href="#collection-cleaning-and-transformation-part-2" id="toc-collection-cleaning-and-transformation-part-2" class="nav-link active" data-scroll-target="#collection-cleaning-and-transformation-part-2">Collection, cleaning and transformation part 2</a>
+  <ul class="collapse">
+  <li><a href="#xxxx" id="toc-xxxx" class="nav-link" data-scroll-target="#xxxx">XXXX</a></li>
+  </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/meier-flo/aau-data-anal-viz/blob/main/index.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/meier-flo/aau-data-anal-viz/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/meier-flo/aau-data-anal-viz/blob/main/content/Session3.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/meier-flo/aau-data-anal-viz/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
-<main class="content column-body" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Data Analysis and Visualisation with R</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
-<p class="subtitle lead">Course Material for AAU Information Studies Fall 2024</p>
+<div class="quarto-title-block"><div><h1 class="title">Data collection:crawling social media (Reddit)</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -208,25 +209,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>A core element of the AAU Information Studies degree is learning about data analysis and visualization. To teach you these skills, we use the <a href="https://www.r-project.org/">statistical programming language R</a>. Specifically, we will use the <a href="https://www.tidyverse.org/">Tidyverse</a>, an opinionated collection of R packages that share an underlying design philosophy, grammar, and data structures.</p>
-<section id="about-this-website" class="level2">
-<h2 class="anchored" data-anchor-id="about-this-website">About this website</h2>
-<p>At AAU we use <a href="https://www.moodle.aau.dk/">Moodle</a> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <a href="https://www.moodle.aau.dk/course/view.php?id=51656">Research Methods in Information Studies</a> and <a href="https://www.moodle.aau.dk/course/view.php?id=51654">User Studies and Information Behaviour</a>. This can be confusing, that is why this website is thought to collect all <strong>R related</strong> teaching in one space and covers all aspects that happen in class. <mark>This means, this website is substituting the <strong>course slides</strong>. Material for preparation before class like reading material can be found on Moodle.</mark></p>
-</section>
-<section id="r-and-rstudio-set-up" class="level2">
-<h2 class="anchored" data-anchor-id="r-and-rstudio-set-up">R and RStudio Set-up</h2>
-<p>Chester Ismay and Albert Kim, the authors of <a href="https://moderndive.com/index.html"><em>Moderndive</em></a> an introductory book to Data Science using R and the Tidyverse, describe it like this: R is a programming language that runs computations, while RStudio is an integrated development environment (IDE) that provides an interface by adding many convenient features and tools. You need to install both parts to get everything to work. You can find the links <a href="https://posit.co/download/rstudio-desktop/">to download both from Posit’s website.</a> A detailed guide can also be found on the <a href="https://moderndive.com/1-getting-started.html">Moderndive website.</a></p>
-<p><img src="img/install.png" class="img-fluid"></p>
-</section>
-<section id="some-general-tips" class="level2">
-<h2 class="anchored" data-anchor-id="some-general-tips">Some general tips</h2>
-<ul>
-<li></li>
-</ul>
+<section id="collection-cleaning-and-transformation-part-2" class="level1">
+<h1>Collection, cleaning and transformation part 2</h1>
+<section id="xxxx" class="level2">
+<h2 class="anchored" data-anchor-id="xxxx">XXXX</h2>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -514,33 +505,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation column-body">
+<nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../content/Session2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Part2:Collection, cleaning and transformation</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./content/Session1.html" class="pagination-link">
-        <span class="nav-page-text">1.Part1:Collection, cleaning and transformation</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/Session4.html" class="pagination-link">
+        <span class="nav-page-text">Data analysis:descriptive statistics &amp; visualisation</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Data Analysis and Visualisation with R"</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Course Material for AAU Information Studies Fall 2024"</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">page-layout:</span><span class="co"> full</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Data collection:crawling social media (Reddit)</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># Collection, cleaning and transformation part 2</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>A core element of the AAU Information Studies degree is learning about data analysis and visualization. To teach you these skills, we use the <span class="co">[</span><span class="ot">statistical programming language R</span><span class="co">](https://www.r-project.org/)</span>. Specifically, we will use the <span class="co">[</span><span class="ot">Tidyverse</span><span class="co">](https://www.tidyverse.org/)</span>, an opinionated collection of R packages that share an underlying design philosophy, grammar, and data structures. </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## XXXX </span></span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## About this website</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>At AAU we use <span class="co">[</span><span class="ot">Moodle</span><span class="co">](https://www.moodle.aau.dk/)</span> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <span class="co">[</span><span class="ot">Research Methods in Information Studies</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51656)</span> and <span class="co">[</span><span class="ot">User Studies and Information Behaviour</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51654)</span>. This can be confusing, that is why this website is thought to collect all **R related** teaching in one space and covers all aspects that happen in class. &lt;mark&gt;This means, this website is substituting the **course slides**. Material for preparation before class like reading material can be found on Moodle.<span class="kw">&lt;/mark&gt;</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## R and RStudio Set-up</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>Chester Ismay and Albert Kim, the authors of <span class="co">[</span><span class="ot">*Moderndive*</span><span class="co">](https://moderndive.com/index.html)</span> an introductory book to Data Science using R and the Tidyverse, describe it like this: R is a programming language that runs computations, while RStudio is an integrated development environment (IDE) that provides an interface by adding many convenient features and tools. You need to install both parts to get everything to work. You can find the links <span class="co">[</span><span class="ot">to download both from Posit's website.</span><span class="co">](https://posit.co/download/rstudio-desktop/)</span> A detailed guide can also be found on the <span class="co">[</span><span class="ot">Moderndive website.</span><span class="co">](https://moderndive.com/1-getting-started.html)</span> </span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/install.png)</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Some general tips</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
