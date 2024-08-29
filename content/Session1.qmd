@@ -119,7 +119,7 @@ penguins_data%>%ggplot(aes(species))+geom_bar()
 
 
 ### Importing data from files
-The tidyverse has a package called `readr` that is specifically dedicated to load various kinds of files, e.g. .CSV, .TSV, EXCEL and so on.
+The tidyverse has a package called `readr` that is specifically dedicated to load various kinds of files, e.g. .csv, .tsv, excel   and so on.
 
 ```{r}
 
