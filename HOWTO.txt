@@ -1,0 +1,4 @@
+- You need to render the site and copy the folder _site 
+- Rename the copy of _site to docs 
+- The docs folder will be used on github pages as the build didn't work
+- You need to commit and push all changes

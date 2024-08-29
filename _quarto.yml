@@ -4,12 +4,12 @@ project:
 website: 
   page-navigation: true
   title: "Data Analysis and Visualisation with R" 
-  site-url: "https://meier-flo.github.io/Data-Anal-Viz-2024/" 
-  repo-url: "https://github.com/meier-flo/Data-Anal-Viz-2024"
-  repo-actions: [edit, source, issue]
+  site-url: "https://meier-flo.github.io/aau-data-anal-viz/" 
+  repo-url: "https://github.com/meier-flo/aau-data-anal-viz"
+  repo-actions: [source, issue]
   
   page-footer:
-    right: "This page is built with [Quarto](https://quarto.org/)."
+    right: "This page is built with [Quarto](https://quarto.org/) using a [NOAA template](https://github.com/nmfs-opensci/NOAA-quarto-simple/)."
     left: "&copy; CC-1.0"
   
   sidebar:
@@ -19,13 +19,13 @@ website:
     align: center
     tools: 
       - icon: house
-        href: https://meier-flo.github.io/Data-Anal-Viz-2024/
+        href: https://meier-flo.github.io/aau-data-anal-viz/
         text: "Home"
       - icon: globe
         href: https://vbn.aau.dk/da/persons/fmeier
         text: "Florian Meier personal website"
       - icon: github
-        href: https://github.com/meier-flo/Data-Anal-Viz-2024
+        href: https://github.com/meier-flo/aau-data-anal-viz
         text: "Github page of the courses"
 
     style: "docked"
@@ -35,11 +35,15 @@ website:
       - href: index.qmd
         text: Home
       - href: content/Session1.qmd
-        text: Session1:Getting to know R and RStudio
-      - href: content/Session4SoMe.qmd
-        text: Session4:Collecting Social Media Data
-      - href: content/acknowledgements.qmd
-        text: Acknowledgements
+        text: 1.Part1:Collection, cleaning and transformation
+      - href: content/Session2.qmd
+        text: 2.Part2:Collection, cleaning and transformation
+      - href: content/Session3.qmd
+        text: 3.Data collection:crawling social media
+      - href: content/Session4.qmd
+        text: 4.Data analysis:descriptive statistics & visualisation
+      - href: content/Session5.qmd
+        text: 5.Data analysis:log analysis
         
 format:
   html:
@@ -49,7 +53,6 @@ format:
     highlight-style: monokai
     theme:
       light: [cosmo, theme.scss] 
-      dark: [cosmo, theme-dark.scss]
     code-copy: true
     code-overflow: wrap
     toc: true
