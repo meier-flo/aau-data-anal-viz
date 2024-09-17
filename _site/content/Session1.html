@@ -188,7 +188,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#let-them-eat-cake" id="toc-let-them-eat-cake" class="nav-link" data-scroll-target="#let-them-eat-cake">Let them eat cake</a></li>
   <li><a href="#importing-data-from-files" id="toc-importing-data-from-files" class="nav-link" data-scroll-target="#importing-data-from-files">Importing data from files</a></li>
   </ul></li>
-  <li><a href="#dplyr-basics" id="toc-dplyr-basics" class="nav-link" data-scroll-target="#dplyr-basics">Dplyr basics</a></li>
+  <li><a href="#dplyr-basics" id="toc-dplyr-basics" class="nav-link" data-scroll-target="#dplyr-basics">Dplyr basics</a>
+  <ul class="collapse">
+  <li><a href="#filter" id="toc-filter" class="nav-link" data-scroll-target="#filter">Filter()</a></li>
+  <li><a href="#arrange" id="toc-arrange" class="nav-link" data-scroll-target="#arrange">Arrange()</a></li>
+  <li><a href="#select" id="toc-select" class="nav-link" data-scroll-target="#select">Select()</a></li>
+  <li><a href="#data-manipulation-pipelines" id="toc-data-manipulation-pipelines" class="nav-link" data-scroll-target="#data-manipulation-pipelines">Data manipulation pipelines</a></li>
+  <li><a href="#write-data-to-file" id="toc-write-data-to-file" class="nav-link" data-scroll-target="#write-data-to-file">Write data to file</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/meier-flo/aau-data-anal-viz/blob/main/content/Session1.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/meier-flo/aau-data-anal-viz/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -214,7 +221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="r-basics-with-intro_new.r" class="level2">
 <h2 class="anchored" data-anchor-id="r-basics-with-intro_new.r">R basics with <code>intro_new.R</code></h2>
-<p>In preparation for the first session, please work yourself through the <code>intro_new.R</code> file. You can download the file from <a href="">Moodle</a> or <a href="">from here</a>.</p>
+<p>In preparation for the first session, please work yourself through the <code>intro_new.R</code> file. You can download the file from <a href="https://www.moodle.aau.dk/pluginfile.php/3314776/mod_resource/content/0/intro_new.R">Moodle</a> or copy paste the parts from here, and put it into a new file. You can create a new file in RStudio via <code>File -&gt; New file -&gt; R Script</code>.</p>
 <div class="cell">
 <details open="">
 <summary>Show/Hide Code</summary>
@@ -351,11 +358,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="importing-data-from-files" class="level3">
 <h3 class="anchored" data-anchor-id="importing-data-from-files">Importing data from files</h3>
-<p>The tidyverse has a package called <code>readr</code> that is specifically dedicated to load various kinds of files, e.g.&nbsp;.csv, .tsv, excel and so on.</p>
+<p>The tidyverse has a package called <code>readr</code> that is specifically dedicated to load various kinds of files, e.g.&nbsp;.csv, .tsv, excel and so on. You can also import data from databases (SQLite or no-sql like CouchDB). Let’s have a quick look We will perform some exercises with the fake usability test data I mentioned in class. For this purpose please download the file <code>usability_test_results.csv</code> <a href="https://www.moodle.aau.dk/mod/resource/view.php?id=1758475">from Moodle</a>.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>usability_test_results <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"usability_test_results.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 30 Columns: 19
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (8): participant_id, timestamp, age, gender, country_of_nationality, ed...
+dbl (11): trips_per_year, countries_visited, completion_task1, seq_task1, to...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
 </section>
 </section>
 <section id="dplyr-basics" class="level2">
 <h2 class="anchored" data-anchor-id="dplyr-basics">Dplyr basics</h2>
+<p>Dplyr works with the pipe symbol <code>%&gt;%</code>. Usually you start with the data frame that you want to manipulate, followed by the first dplyr verb. E.g: <code>penguins_data%&gt;%filter()</code> or <code>penguins_data%&gt;%select</code>. You can chain the verbs as much as you want and create data manipulation pipelines. E.g: <code>penguins_data%&gt;%filter(...)%&gt;%select(...)</code>. We will see more examples further below.</p>
+<section id="filter" class="level3">
+<h3 class="anchored" data-anchor-id="filter">Filter()</h3>
 <p>Now we get to know the verbs that are part of <code>dplyr</code>. We start with the <code>filter()</code> function and the different logical operators e.g.<code>AND, OR, NOT, is.na()</code>. We will aim at answering the following questions:</p>
 <ul>
 <li>Find all penguins that were found on island Dream</li>
@@ -364,10 +390,271 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Are there more male or female penguins that are heavier than 4kg?</li>
 <li>Find all penguins where the sex is not missing (NA)</li>
 </ul>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We start off by learning about filter()</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We want the ones that lived on island Dream</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(island<span class="sc">==</span><span class="st">'Dream'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># We want the ones heavier than 4kg</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>)<span class="sc">%&gt;%</span><span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 172</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We ant to have all females heavier than 4000</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">'female'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># another way is using only one filter</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>,sex<span class="sc">==</span><span class="st">'female'</span>)<span class="sc">%&gt;%</span><span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 58</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Are there more male penguins </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>,sex<span class="sc">==</span><span class="st">'male'</span>)<span class="sc">%&gt;%</span><span class="fu">nrow</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 109</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to filter out the penguins with missing sex</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>penguins_complete_sex<span class="ot">&lt;-</span>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now we perform some exercises with the <code>usability_test_results.csv</code>. We try to answer the following questions:</p>
+<ul>
+<li>Find all participants that are from Denmark</li>
+<li>Find all participants that successfully completed task 3</li>
+<li>Find all participants that have a bachelor and whose favorite country is Japan</li>
+<li>Find all participants whose favorite country is Germany or Italy</li>
+<li><mark>Advanced </mark>: Find all participants whose time on task2 #lies above the average for that task</li>
+<li><mark> Advanced </mark>: Filter based on <code>%in%</code>: Exclude participants from United States, Canada Mexico.</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants that are from Denmark</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(country_of_nationality<span class="sc">==</span><span class="st">'Denmark'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants that successfully completed task 3</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(completion_task3<span class="sc">==</span><span class="dv">1</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants that have a bachelor and whose favorite country</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># is Japan</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(education<span class="sc">==</span><span class="st">'Bachelor'</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>                                favority_country<span class="sc">==</span><span class="st">'Japan'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants whose favorite country is germany or italy</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(favority_country<span class="sc">==</span><span class="st">'Germany'</span><span class="sc">|</span>favority_country<span class="sc">==</span><span class="st">'Italy'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Find all participants whose time on task2 </span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co">#lies above the average for that task</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(<span class="fu">mean</span>(tot_task2)<span class="sc">&lt;</span>tot_task2)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Use base are style of writing to calculate an average</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(usability_test_results<span class="sc">$</span>tot_task2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 44.83333</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Show an example of how to use %in% to filter by values</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># of a vector</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>countries_to_filter<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">'United States'</span>,<span class="st">'Canada'</span>,<span class="st">'Mexico'</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>country_of_nationality<span class="sc">%in%</span>countries_to_filter)<span class="sc">%&gt;%</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="arrange" class="level3">
+<h3 class="anchored" data-anchor-id="arrange">Arrange()</h3>
+<p>Sorting your data can be important to get an overview of the data but also for certain processing tasks. You can sort using the <code>arrange()</code> function. Per default <code>arrange</code> sorts ascending i.e.&nbsp;from lowest to highest. Use the <code>desc()</code> inside arrange to sort from high to low.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we want to look at sorting data with arrange()</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(flipper_length_mm)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(<span class="fu">desc</span>(body_mass_g))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(<span class="sc">-</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(bill_length_mm,bill_depth_mm)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Two exercises with the usability_test_data</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the test data based on the country of origin of the participants </span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the test data based on subjective task difficulty (seq_task1)</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">arrange</span>(<span class="sc">-</span>seq_task1,<span class="sc">-</span>seq_task2,<span class="sc">-</span>seq_task3)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="select" class="level3">
+<h3 class="anchored" data-anchor-id="select">Select()</h3>
+<p>It is often the case that you only need a subset of the data for further processing or visualisation. In these situations the <code>select()</code> function becomes handy, as it allows us to select only the needed <strong>columns or variables</strong> from the data.frame. <code>Select()</code> has many different ways of how it can be used. Here it is worth to <a href="https://dplyr.tidyverse.org/reference/select.html">look at the documentation</a> to get an overview of what the options are.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's now look into selecting different columnns</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we use the select() function for that </span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># by column name</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(species,island,body_mass_g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 3
+   species island    body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;           &lt;int&gt;
+ 1 Adelie  Torgersen        3750
+ 2 Adelie  Torgersen        3800
+ 3 Adelie  Torgersen        3250
+ 4 Adelie  Torgersen          NA
+ 5 Adelie  Torgersen        3450
+ 6 Adelie  Torgersen        3650
+ 7 Adelie  Torgersen        3625
+ 8 Adelie  Torgersen        4675
+ 9 Adelie  Torgersen        3475
+10 Adelie  Torgersen        4250
+# ℹ 334 more rows</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select by range</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(bill_length_mm<span class="sc">:</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co"># select by column number</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(<span class="dv">1</span>,<span class="dv">7</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># select ALL columns but an exception </span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(<span class="sc">-</span>island)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co"># you can use function within select</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># for example starts_with(), ends_with(), contains()</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(species,<span class="fu">starts_with</span>(<span class="st">'bill_'</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now it is on you again, to perform some exercises with the <code>usability_test_results.csv</code>. Try do do the following:</p>
+<ul>
+<li>Create a data frame that only contains the columns: participant_id, age, and trips per year.</li>
+<li>Create a data frame that contains column 2 and tot_task3.</li>
+<li>Create a data frame that contains participant_id and all columns that are related to task1.</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Select participant_id, age and trips per year</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">select</span>(participant_id,age,trips_per_year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 30 × 3
+   participant_id age   trips_per_year
+   &lt;chr&gt;          &lt;chr&gt;          &lt;dbl&gt;
+ 1 id_1           22-29             15
+ 2 id_2           22-29             10
+ 3 id_3           51-64              0
+ 4 id_4           19-21              5
+ 5 id_5           30-40              3
+ 6 id_6           19-21              5
+ 7 id_7           51-64              4
+ 8 id_8           22-29              2
+ 9 id_9           22-29             13
+10 id_10          22-29              4
+# ℹ 20 more rows</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Select the second and the last column</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">select</span>(<span class="dv">2</span>,tot_task3)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Select participant_id and all column related to task1</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">select</span>(participant_id,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">contains</span>(<span class="st">"task1"</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's do some renaming of column names </span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">weight=</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="data-manipulation-pipelines" class="level3">
+<h3 class="anchored" data-anchor-id="data-manipulation-pipelines">Data manipulation pipelines</h3>
+<p>You can combine the verbs in any way you want and chain them one after another. E.g. <code>filter %&gt;% filter %&gt;% select %&gt;% filter</code> is possible. But be aware to only filter on columns that still exist!</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>penguins_new<span class="ot">&lt;-</span>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(island<span class="sc">==</span><span class="st">'Dream'</span><span class="sc">|</span>island<span class="sc">==</span><span class="st">'Torgersen'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">'male'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">select</span>(species,body_mass_g)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># or an example with the usability_test_results </span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(education<span class="sc">==</span><span class="st">'Bachelor'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">filter</span>(completion_task3<span class="sc">==</span><span class="dv">1</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">select</span>(participant_id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 1
+  participant_id
+  &lt;chr&gt;         
+1 id_3          
+2 id_4          
+3 id_8          
+4 id_9          
+5 id_11         
+6 id_23         
+7 id_24         
+8 id_25         
+9 id_27         </code></pre>
+</div>
+</div>
+</section>
+<section id="write-data-to-file" class="level3">
+<h3 class="anchored" data-anchor-id="write-data-to-file">Write data to file</h3>
+<p>Finally, we want to write a data to file, so we can reload it later on. We have two options: * Write the data to an <code>.Rdata</code> file, R’s customs binary format, using <code>write_rds()</code>. This file can then be loaded via <code>read_rds()</code>. * Write to a .csv file - increased interoperability and better for sharing with others. <code>readr</code> has a specific function that let’s you create .csv files that are easy to open in excel: <code>write_excel_csv()</code>.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>penguins_new<span class="ot">&lt;-</span>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(island<span class="sc">==</span><span class="st">'Dream'</span><span class="sc">|</span>island<span class="sc">==</span><span class="st">'Torgersen'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">'male'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">select</span>(species,body_mass_g)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(penguins_new,<span class="st">'penguins_new.rds'</span>)</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use the usability_test_results </span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to get all participants in the age group 22-29</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co"># We want that they completed task 2 </span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># And then we want all columns related to that task (task2)</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>usability_new<span class="ot">&lt;-</span>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(age<span class="sc">==</span><span class="st">'22-29'</span>,completion_task2<span class="sc">==</span><span class="st">'1'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">'task2'</span>))</span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="fu">write_excel_csv</span>(<span class="at">x =</span> usability_new,<span class="st">'usablity_new.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -667,144 +954,331 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb6" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Part1:Collection, cleaning and transformation</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## R basics with `intro_new.R`</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>In preparation for the first session, please work yourself through the <span class="in">`intro_new.R`</span> file. You can download the file from <span class="co">[</span><span class="ot">Moodle</span><span class="co">]()</span> or <span class="co">[</span><span class="ot">from here</span><span class="co">]()</span>.</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="do">#######</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Introduction to programming // R 101</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="do">######</span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="do">#### </span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Watch the following videos that explain the main components of R</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Functions: https://vimeo.com/220490105</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Arguments: https://vimeo.com/220490157</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Objects: https://vimeo.com/220493412 </span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------</span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectors: https://vimeo.com/220490316 </span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Data Types: https://vimeo.com/220490241 </span></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="do">#### </span></span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Now try to solve the following tasks:</span></span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.1 Execute the following lines. Try to explain the differences between line 28, 30 and 31?</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">+</span><span class="dv">4</span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">5</span></span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> a <span class="sc">-</span> b</span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(a,b)</span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(a,b)</span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(a,b)</span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">sum</span>(a,b)</span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> a <span class="sc">+</span> b </span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Why does the following snippet return NA?</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co"># What does NA mean? (try to google for it)</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co"># What can you do to make it return a number? (look in the documentation for help)</span></span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">7</span>,<span class="cn">NA</span>)</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.3 Investigate the following four vectors:</span></span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the function typeof() to investigate each vectors datatype</span></span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a><span class="co"># What is suprising about v4? Can you explain what happened?</span></span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a><span class="co"># How can you check whether 6 is part of v3?</span></span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a><span class="co"># Use length() to check whether v1 and v2 are of similar length?</span></span>
-<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'one'</span>,<span class="st">'two'</span>,<span class="st">'three'</span>,<span class="st">'four'</span>)</span>
-<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'1'</span>,<span class="st">'2'</span>,<span class="st">'3'</span>,<span class="st">'4'</span>)</span>
-<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>v3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
-<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>v4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="st">'two'</span>,<span class="dv">3</span>)</span>
-<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a><span class="co">#2.Investigate the built in data-set 'mtcars'. </span></span>
-<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str(mtcars) to answer the following questions:</span></span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Which data type does the data-set have?</span></span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># How many variables and observartions does the data-set have?</span></span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Call the help function for the data-set </span></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># to find out about the meaning of the variables</span></span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select three variables of the data set and save them in a </span></span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># single new vector, one for each</span></span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Can you select a single row of the data frame using base R only? </span></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Try to google/use stackoverflow for help!</span></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally watch the video on packages in R</span></span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages: https://vimeo.com/220490447 </span></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the package tidyverse and make it available for use</span></span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a><span class="co"># To check whether you were successful try to </span></span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a><span class="co"># run the following code snippet: </span></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diamonds) <span class="sc">+</span></span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_bar</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> cut))</span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## Intalling and loading packages</span></span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>Base R can easily be extended by additional functions, data and routines that are wrapped in so called *packages*. R has a large community that develops packages on a daily basis which makes the programming language so accessible and versatile. Packages can either be installed via the RStudio GUI or via the console/your R code. You use the function <span class="in">`install.packages()`</span> and put in the name of the package. As mentioned earlier we will use the tidyverse. We also start with a packages that gives us access to a popular data set, the palmer penguins data. After installing the packages you also need to make them accessible. This you do by using the function <span class="in">`require()`</span> or <span class="in">`library()`</span>. Note that packages only need to be installed once. However, everytime you reopen your RStudio, you also need to make the package accessible again via either <span class="in">`require()`</span> or <span class="in">`library()`</span>.</span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=FALSE,eval=TRUE,message=FALSE}</span></span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("palmerpenguins")</span></span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span>
-<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"palmerpenguins"</span>)</span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a><span class="fu">### Let them eat cake</span></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>Let's have a look at the <span class="in">`penguins`</span> data and do a first little bar chart of the penguins. </span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="co"># We save the built-in dataset into a data.frame/tibble that lives in your environment.</span></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="ot">&lt;-</span>penguins</span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>penguins_data</span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">ggplot</span>(<span class="fu">aes</span>(species))<span class="sc">+</span><span class="fu">geom_bar</span>()</span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### Importing data from files</span></span>
-<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>The tidyverse has a package called <span class="in">`readr`</span> that is specifically dedicated to load various kinds of files, e.g. .csv, .tsv, excel   and so on.</span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dplyr basics</span></span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>Now we get to know the verbs that are part of <span class="in">`dplyr`</span>. We start with the <span class="in">`filter()`</span> function and the different logical operators e.g.<span class="in">`AND, OR, NOT, is.na()`</span>. We will aim at answering the following questions: </span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that were found on island Dream</span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that are heavier than 4 kg</span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that are female and heavier than 4 kg</span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Are there more male or female penguins that are heavier than 4kg?</span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins where the sex is not missing (NA)</span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<div class="sourceCode" id="cb28" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Part1:Collection, cleaning and transformation</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## R basics with `intro_new.R`</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>In preparation for the first session, please work yourself through the <span class="in">`intro_new.R`</span> file. You can download the file from <span class="co">[</span><span class="ot">Moodle</span><span class="co">](https://www.moodle.aau.dk/pluginfile.php/3314776/mod_resource/content/0/intro_new.R)</span> or copy paste the parts from here, and put it into a new file.</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>You can create a new file in RStudio via <span class="in">`File -&gt; New file -&gt; R Script`</span>.</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="do">#######</span></span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="do">## Introduction to programming // R 101</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a><span class="do">######</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a><span class="do">#### </span></span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Watch the following videos that explain the main components of R</span></span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Functions: https://vimeo.com/220490105</span></span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------</span></span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Arguments: https://vimeo.com/220490157</span></span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true" tabindex="-1"></a><span class="co">#------------------------------------------</span></span>
+<span id="cb28-22"><a href="#cb28-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Objects: https://vimeo.com/220493412 </span></span>
+<span id="cb28-23"><a href="#cb28-23" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------</span></span>
+<span id="cb28-24"><a href="#cb28-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Vectors: https://vimeo.com/220490316 </span></span>
+<span id="cb28-25"><a href="#cb28-25" aria-hidden="true" tabindex="-1"></a><span class="co"># -----------------------------------------</span></span>
+<span id="cb28-26"><a href="#cb28-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Data Types: https://vimeo.com/220490241 </span></span>
+<span id="cb28-27"><a href="#cb28-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-28"><a href="#cb28-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-29"><a href="#cb28-29" aria-hidden="true" tabindex="-1"></a><span class="do">#### </span></span>
+<span id="cb28-30"><a href="#cb28-30" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Now try to solve the following tasks:</span></span>
+<span id="cb28-31"><a href="#cb28-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-32"><a href="#cb28-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.1 Execute the following lines. Try to explain the differences between line 28, 30 and 31?</span></span>
+<span id="cb28-33"><a href="#cb28-33" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span><span class="sc">+</span><span class="dv">4</span></span>
+<span id="cb28-34"><a href="#cb28-34" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb28-35"><a href="#cb28-35" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb28-36"><a href="#cb28-36" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> a <span class="sc">-</span> b</span>
+<span id="cb28-37"><a href="#cb28-37" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(a,b)</span>
+<span id="cb28-38"><a href="#cb28-38" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(a,b)</span>
+<span id="cb28-39"><a href="#cb28-39" aria-hidden="true" tabindex="-1"></a><span class="fu">max</span>(a,b)</span>
+<span id="cb28-40"><a href="#cb28-40" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">sum</span>(a,b)</span>
+<span id="cb28-41"><a href="#cb28-41" aria-hidden="true" tabindex="-1"></a>f <span class="ot">&lt;-</span> a <span class="sc">+</span> b </span>
+<span id="cb28-42"><a href="#cb28-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-43"><a href="#cb28-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-44"><a href="#cb28-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-45"><a href="#cb28-45" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.2 Why does the following snippet return NA?</span></span>
+<span id="cb28-46"><a href="#cb28-46" aria-hidden="true" tabindex="-1"></a><span class="co"># What does NA mean? (try to google for it)</span></span>
+<span id="cb28-47"><a href="#cb28-47" aria-hidden="true" tabindex="-1"></a><span class="co"># What can you do to make it return a number? (look in the documentation for help)</span></span>
+<span id="cb28-48"><a href="#cb28-48" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">7</span>,<span class="cn">NA</span>)</span>
+<span id="cb28-49"><a href="#cb28-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-50"><a href="#cb28-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-51"><a href="#cb28-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-52"><a href="#cb28-52" aria-hidden="true" tabindex="-1"></a><span class="co"># 1.3 Investigate the following four vectors:</span></span>
+<span id="cb28-53"><a href="#cb28-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Use the function typeof() to investigate each vectors datatype</span></span>
+<span id="cb28-54"><a href="#cb28-54" aria-hidden="true" tabindex="-1"></a><span class="co"># What is suprising about v4? Can you explain what happened?</span></span>
+<span id="cb28-55"><a href="#cb28-55" aria-hidden="true" tabindex="-1"></a><span class="co"># How can you check whether 6 is part of v3?</span></span>
+<span id="cb28-56"><a href="#cb28-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Use length() to check whether v1 and v2 are of similar length?</span></span>
+<span id="cb28-57"><a href="#cb28-57" aria-hidden="true" tabindex="-1"></a>v1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'one'</span>,<span class="st">'two'</span>,<span class="st">'three'</span>,<span class="st">'four'</span>)</span>
+<span id="cb28-58"><a href="#cb28-58" aria-hidden="true" tabindex="-1"></a>v2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">'1'</span>,<span class="st">'2'</span>,<span class="st">'3'</span>,<span class="st">'4'</span>)</span>
+<span id="cb28-59"><a href="#cb28-59" aria-hidden="true" tabindex="-1"></a>v3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>)</span>
+<span id="cb28-60"><a href="#cb28-60" aria-hidden="true" tabindex="-1"></a>v4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="st">'two'</span>,<span class="dv">3</span>)</span>
+<span id="cb28-61"><a href="#cb28-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-62"><a href="#cb28-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-63"><a href="#cb28-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-64"><a href="#cb28-64" aria-hidden="true" tabindex="-1"></a><span class="co">#2.Investigate the built in data-set 'mtcars'. </span></span>
+<span id="cb28-65"><a href="#cb28-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Use str(mtcars) to answer the following questions:</span></span>
+<span id="cb28-66"><a href="#cb28-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-67"><a href="#cb28-67" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Which data type does the data-set have?</span></span>
+<span id="cb28-68"><a href="#cb28-68" aria-hidden="true" tabindex="-1"></a>    <span class="co"># How many variables and observartions does the data-set have?</span></span>
+<span id="cb28-69"><a href="#cb28-69" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Call the help function for the data-set </span></span>
+<span id="cb28-70"><a href="#cb28-70" aria-hidden="true" tabindex="-1"></a>    <span class="co"># to find out about the meaning of the variables</span></span>
+<span id="cb28-71"><a href="#cb28-71" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Select three variables of the data set and save them in a </span></span>
+<span id="cb28-72"><a href="#cb28-72" aria-hidden="true" tabindex="-1"></a>    <span class="co"># single new vector, one for each</span></span>
+<span id="cb28-73"><a href="#cb28-73" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Can you select a single row of the data frame using base R only? </span></span>
+<span id="cb28-74"><a href="#cb28-74" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Try to google/use stackoverflow for help!</span></span>
+<span id="cb28-75"><a href="#cb28-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-76"><a href="#cb28-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-77"><a href="#cb28-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-78"><a href="#cb28-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-79"><a href="#cb28-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-80"><a href="#cb28-80" aria-hidden="true" tabindex="-1"></a><span class="do">###########</span></span>
+<span id="cb28-81"><a href="#cb28-81" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally watch the video on packages in R</span></span>
+<span id="cb28-82"><a href="#cb28-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Packages: https://vimeo.com/220490447 </span></span>
+<span id="cb28-83"><a href="#cb28-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-84"><a href="#cb28-84" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the package tidyverse and make it available for use</span></span>
+<span id="cb28-85"><a href="#cb28-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-86"><a href="#cb28-86" aria-hidden="true" tabindex="-1"></a><span class="co"># To check whether you were successful try to </span></span>
+<span id="cb28-87"><a href="#cb28-87" aria-hidden="true" tabindex="-1"></a><span class="co"># run the following code snippet: </span></span>
+<span id="cb28-88"><a href="#cb28-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-89"><a href="#cb28-89" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> diamonds) <span class="sc">+</span></span>
+<span id="cb28-90"><a href="#cb28-90" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_bar</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> cut))</span>
+<span id="cb28-91"><a href="#cb28-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-92"><a href="#cb28-92" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-93"><a href="#cb28-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-94"><a href="#cb28-94" aria-hidden="true" tabindex="-1"></a><span class="fu">## Intalling and loading packages</span></span>
+<span id="cb28-95"><a href="#cb28-95" aria-hidden="true" tabindex="-1"></a>Base R can easily be extended by additional functions, data and routines that are wrapped in so called *packages*. R has a large community that develops packages on a daily basis which makes the programming language so accessible and versatile. Packages can either be installed via the RStudio GUI or via the console/your R code. You use the function <span class="in">`install.packages()`</span> and put in the name of the package. As mentioned earlier we will use the tidyverse. We also start with a packages that gives us access to a popular data set, the palmer penguins data. After installing the packages you also need to make them accessible. This you do by using the function <span class="in">`require()`</span> or <span class="in">`library()`</span>. Note that packages only need to be installed once. However, everytime you reopen your RStudio, you also need to make the package accessible again via either <span class="in">`require()`</span> or <span class="in">`library()`</span>.</span>
+<span id="cb28-96"><a href="#cb28-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-97"><a href="#cb28-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=FALSE,eval=TRUE,message=FALSE}</span></span>
+<span id="cb28-98"><a href="#cb28-98" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
+<span id="cb28-99"><a href="#cb28-99" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("palmerpenguins")</span></span>
+<span id="cb28-100"><a href="#cb28-100" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb28-101"><a href="#cb28-101" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span>
+<span id="cb28-102"><a href="#cb28-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-103"><a href="#cb28-103" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-104"><a href="#cb28-104" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
+<span id="cb28-105"><a href="#cb28-105" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb28-106"><a href="#cb28-106" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"palmerpenguins"</span>)</span>
+<span id="cb28-107"><a href="#cb28-107" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb28-108"><a href="#cb28-108" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span>
+<span id="cb28-109"><a href="#cb28-109" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-110"><a href="#cb28-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-111"><a href="#cb28-111" aria-hidden="true" tabindex="-1"></a><span class="fu">### Let them eat cake</span></span>
+<span id="cb28-112"><a href="#cb28-112" aria-hidden="true" tabindex="-1"></a>Let's have a look at the <span class="in">`penguins`</span> data and do a first little bar chart of the penguins. </span>
+<span id="cb28-113"><a href="#cb28-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-116"><a href="#cb28-116" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-117"><a href="#cb28-117" aria-hidden="true" tabindex="-1"></a><span class="co"># We save the built-in dataset into a data.frame/tibble that lives in your environment.</span></span>
+<span id="cb28-118"><a href="#cb28-118" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="ot">&lt;-</span>penguins</span>
+<span id="cb28-119"><a href="#cb28-119" aria-hidden="true" tabindex="-1"></a>penguins_data</span>
+<span id="cb28-120"><a href="#cb28-120" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">ggplot</span>(<span class="fu">aes</span>(species))<span class="sc">+</span><span class="fu">geom_bar</span>()</span>
+<span id="cb28-121"><a href="#cb28-121" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-122"><a href="#cb28-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-123"><a href="#cb28-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-124"><a href="#cb28-124" aria-hidden="true" tabindex="-1"></a><span class="fu">### Importing data from files</span></span>
+<span id="cb28-125"><a href="#cb28-125" aria-hidden="true" tabindex="-1"></a>The tidyverse has a package called <span class="in">`readr`</span> that is specifically dedicated to load various kinds of files, e.g. .csv, .tsv, excel and so on. You can also import data from databases (SQLite or no-sql like CouchDB). Let's have a quick look </span>
+<span id="cb28-126"><a href="#cb28-126" aria-hidden="true" tabindex="-1"></a>We will perform some exercises with the fake usability test data I mentioned in class. For this purpose please download the file <span class="in">`usability_test_results.csv`</span> <span class="co">[</span><span class="ot">from Moodle</span><span class="co">](https://www.moodle.aau.dk/mod/resource/view.php?id=1758475)</span>.</span>
+<span id="cb28-127"><a href="#cb28-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-128"><a href="#cb28-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-129"><a href="#cb28-129" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE, eval=TRUE}</span></span>
+<span id="cb28-130"><a href="#cb28-130" aria-hidden="true" tabindex="-1"></a>usability_test_results <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"usability_test_results.csv"</span>)</span>
+<span id="cb28-131"><a href="#cb28-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-132"><a href="#cb28-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-133"><a href="#cb28-133" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-134"><a href="#cb28-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-135"><a href="#cb28-135" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dplyr basics</span></span>
+<span id="cb28-136"><a href="#cb28-136" aria-hidden="true" tabindex="-1"></a>Dplyr works with the pipe symbol <span class="in">`%&gt;%`</span>. Usually you start with the data frame that you want to manipulate, followed by the first dplyr verb. E.g: <span class="in">`penguins_data%&gt;%filter()`</span> or <span class="in">`penguins_data%&gt;%select`</span>. You can chain the verbs as much as you want and create data manipulation pipelines. E.g: <span class="in">`penguins_data%&gt;%filter(...)%&gt;%select(...)`</span>. We will see more examples further below. </span>
+<span id="cb28-137"><a href="#cb28-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-138"><a href="#cb28-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-139"><a href="#cb28-139" aria-hidden="true" tabindex="-1"></a><span class="fu">### Filter()</span></span>
+<span id="cb28-140"><a href="#cb28-140" aria-hidden="true" tabindex="-1"></a>Now we get to know the verbs that are part of <span class="in">`dplyr`</span>. We start with the <span class="in">`filter()`</span> function and the different logical operators e.g.<span class="in">`AND, OR, NOT, is.na()`</span>. We will aim at answering the following questions: </span>
+<span id="cb28-141"><a href="#cb28-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-142"><a href="#cb28-142" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that were found on island Dream</span>
+<span id="cb28-143"><a href="#cb28-143" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that are heavier than 4 kg</span>
+<span id="cb28-144"><a href="#cb28-144" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins that are female and heavier than 4 kg</span>
+<span id="cb28-145"><a href="#cb28-145" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Are there more male or female penguins that are heavier than 4kg?</span>
+<span id="cb28-146"><a href="#cb28-146" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all penguins where the sex is not missing (NA)</span>
+<span id="cb28-147"><a href="#cb28-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-148"><a href="#cb28-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-151"><a href="#cb28-151" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-152"><a href="#cb28-152" aria-hidden="true" tabindex="-1"></a><span class="co"># We start off by learning about filter()</span></span>
+<span id="cb28-153"><a href="#cb28-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-154"><a href="#cb28-154" aria-hidden="true" tabindex="-1"></a><span class="co"># We want the ones that lived on island Dream</span></span>
+<span id="cb28-155"><a href="#cb28-155" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(island<span class="sc">==</span><span class="st">'Dream'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-156"><a href="#cb28-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-157"><a href="#cb28-157" aria-hidden="true" tabindex="-1"></a><span class="co"># We want the ones heavier than 4kg</span></span>
+<span id="cb28-158"><a href="#cb28-158" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>)<span class="sc">%&gt;%</span><span class="fu">nrow</span>()</span>
+<span id="cb28-159"><a href="#cb28-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-160"><a href="#cb28-160" aria-hidden="true" tabindex="-1"></a><span class="co"># We ant to have all females heavier than 4000</span></span>
+<span id="cb28-161"><a href="#cb28-161" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-162"><a href="#cb28-162" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">'female'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-163"><a href="#cb28-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-164"><a href="#cb28-164" aria-hidden="true" tabindex="-1"></a><span class="co"># another way is using only one filter</span></span>
+<span id="cb28-165"><a href="#cb28-165" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>,sex<span class="sc">==</span><span class="st">'female'</span>)<span class="sc">%&gt;%</span><span class="fu">nrow</span>()</span>
+<span id="cb28-166"><a href="#cb28-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-167"><a href="#cb28-167" aria-hidden="true" tabindex="-1"></a><span class="co"># Are there more male penguins </span></span>
+<span id="cb28-168"><a href="#cb28-168" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(body_mass_g<span class="sc">&gt;</span><span class="dv">4000</span>,sex<span class="sc">==</span><span class="st">'male'</span>)<span class="sc">%&gt;%</span><span class="fu">nrow</span>()</span>
+<span id="cb28-169"><a href="#cb28-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-170"><a href="#cb28-170" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to filter out the penguins with missing sex</span></span>
+<span id="cb28-171"><a href="#cb28-171" aria-hidden="true" tabindex="-1"></a>penguins_complete_sex<span class="ot">&lt;-</span>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(sex))</span>
+<span id="cb28-172"><a href="#cb28-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-173"><a href="#cb28-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-174"><a href="#cb28-174" aria-hidden="true" tabindex="-1"></a>Now we perform some exercises with the <span class="in">`usability_test_results.csv`</span>. We try to answer the following questions:</span>
+<span id="cb28-175"><a href="#cb28-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-176"><a href="#cb28-176" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all participants that are from Denmark</span>
+<span id="cb28-177"><a href="#cb28-177" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all participants that successfully completed task 3</span>
+<span id="cb28-178"><a href="#cb28-178" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all participants that have a bachelor and whose favorite country is Japan</span>
+<span id="cb28-179"><a href="#cb28-179" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Find all participants whose favorite country is Germany or Italy</span>
+<span id="cb28-180"><a href="#cb28-180" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="kw">&lt;mark&gt;</span>Advanced <span class="kw">&lt;/mark&gt;</span>: Find all participants whose time on task2 </span>
+<span id="cb28-181"><a href="#cb28-181" aria-hidden="true" tabindex="-1"></a>#lies above the average for that task</span>
+<span id="cb28-182"><a href="#cb28-182" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span><span class="kw">&lt;mark&gt;</span> Advanced <span class="kw">&lt;/mark&gt;</span>: Filter based on <span class="in">`%in%`</span>: Exclude participants from United States, Canada Mexico.</span>
+<span id="cb28-183"><a href="#cb28-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-186"><a href="#cb28-186" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-187"><a href="#cb28-187" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants that are from Denmark</span></span>
+<span id="cb28-188"><a href="#cb28-188" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(country_of_nationality<span class="sc">==</span><span class="st">'Denmark'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-189"><a href="#cb28-189" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-190"><a href="#cb28-190" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants that successfully completed task 3</span></span>
+<span id="cb28-191"><a href="#cb28-191" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(completion_task3<span class="sc">==</span><span class="dv">1</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-192"><a href="#cb28-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-193"><a href="#cb28-193" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants that have a bachelor and whose favorite country</span></span>
+<span id="cb28-194"><a href="#cb28-194" aria-hidden="true" tabindex="-1"></a><span class="co"># is Japan</span></span>
+<span id="cb28-195"><a href="#cb28-195" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(education<span class="sc">==</span><span class="st">'Bachelor'</span>,</span>
+<span id="cb28-196"><a href="#cb28-196" aria-hidden="true" tabindex="-1"></a>                                favority_country<span class="sc">==</span><span class="st">'Japan'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-197"><a href="#cb28-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-198"><a href="#cb28-198" aria-hidden="true" tabindex="-1"></a><span class="co"># Find all participants whose favorite country is germany or italy</span></span>
+<span id="cb28-199"><a href="#cb28-199" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb28-200"><a href="#cb28-200" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(favority_country<span class="sc">==</span><span class="st">'Germany'</span><span class="sc">|</span>favority_country<span class="sc">==</span><span class="st">'Italy'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-201"><a href="#cb28-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-202"><a href="#cb28-202" aria-hidden="true" tabindex="-1"></a><span class="co">#Find all participants whose time on task2 </span></span>
+<span id="cb28-203"><a href="#cb28-203" aria-hidden="true" tabindex="-1"></a><span class="co">#lies above the average for that task</span></span>
+<span id="cb28-204"><a href="#cb28-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-205"><a href="#cb28-205" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(<span class="fu">mean</span>(tot_task2)<span class="sc">&lt;</span>tot_task2)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-206"><a href="#cb28-206" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-207"><a href="#cb28-207" aria-hidden="true" tabindex="-1"></a><span class="co">#Use base are style of writing to calculate an average</span></span>
+<span id="cb28-208"><a href="#cb28-208" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(usability_test_results<span class="sc">$</span>tot_task2)</span>
+<span id="cb28-209"><a href="#cb28-209" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-210"><a href="#cb28-210" aria-hidden="true" tabindex="-1"></a><span class="co"># Show an example of how to use %in% to filter by values</span></span>
+<span id="cb28-211"><a href="#cb28-211" aria-hidden="true" tabindex="-1"></a><span class="co"># of a vector</span></span>
+<span id="cb28-212"><a href="#cb28-212" aria-hidden="true" tabindex="-1"></a>countries_to_filter<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">'United States'</span>,<span class="st">'Canada'</span>,<span class="st">'Mexico'</span>)</span>
+<span id="cb28-213"><a href="#cb28-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-214"><a href="#cb28-214" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb28-215"><a href="#cb28-215" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>country_of_nationality<span class="sc">%in%</span>countries_to_filter)<span class="sc">%&gt;%</span></span>
+<span id="cb28-216"><a href="#cb28-216" aria-hidden="true" tabindex="-1"></a>      <span class="fu">view</span>()</span>
+<span id="cb28-217"><a href="#cb28-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-218"><a href="#cb28-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-219"><a href="#cb28-219" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-220"><a href="#cb28-220" aria-hidden="true" tabindex="-1"></a><span class="fu">### Arrange()</span></span>
+<span id="cb28-221"><a href="#cb28-221" aria-hidden="true" tabindex="-1"></a>Sorting your data can be important to get an overview of the data but also for certain processing tasks. You can sort using the <span class="in">`arrange()`</span> function. Per default <span class="in">`arrange`</span> sorts ascending i.e. from lowest to highest. Use the <span class="in">`desc()`</span> inside arrange to sort from high to low. </span>
+<span id="cb28-222"><a href="#cb28-222" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-223"><a href="#cb28-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-226"><a href="#cb28-226" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-227"><a href="#cb28-227" aria-hidden="true" tabindex="-1"></a><span class="co"># Now we want to look at sorting data with arrange()</span></span>
+<span id="cb28-228"><a href="#cb28-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-229"><a href="#cb28-229" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(flipper_length_mm)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-230"><a href="#cb28-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-231"><a href="#cb28-231" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(<span class="fu">desc</span>(body_mass_g))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-232"><a href="#cb28-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-233"><a href="#cb28-233" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(<span class="sc">-</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-234"><a href="#cb28-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-235"><a href="#cb28-235" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">arrange</span>(bill_length_mm,bill_depth_mm)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-236"><a href="#cb28-236" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-237"><a href="#cb28-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-238"><a href="#cb28-238" aria-hidden="true" tabindex="-1"></a><span class="co"># Two exercises with the usability_test_data</span></span>
+<span id="cb28-239"><a href="#cb28-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-240"><a href="#cb28-240" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the test data based on the country of origin of the participants </span></span>
+<span id="cb28-241"><a href="#cb28-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-242"><a href="#cb28-242" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the test data based on subjective task difficulty (seq_task1)</span></span>
+<span id="cb28-243"><a href="#cb28-243" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">arrange</span>(<span class="sc">-</span>seq_task1,<span class="sc">-</span>seq_task2,<span class="sc">-</span>seq_task3)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-244"><a href="#cb28-244" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-245"><a href="#cb28-245" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-246"><a href="#cb28-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-247"><a href="#cb28-247" aria-hidden="true" tabindex="-1"></a><span class="fu">### Select()</span></span>
+<span id="cb28-248"><a href="#cb28-248" aria-hidden="true" tabindex="-1"></a>It is often the case that you only need a subset of the data for further processing or visualisation. In these situations the <span class="in">`select()`</span> function becomes handy, as it allows us to select only the needed **columns or variables** from the data.frame. <span class="in">`Select()`</span> has many different ways of how it can be used. Here it is worth to <span class="co">[</span><span class="ot">look at the documentation</span><span class="co">](https://dplyr.tidyverse.org/reference/select.html)</span> to get an overview of what the options are.</span>
+<span id="cb28-249"><a href="#cb28-249" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-252"><a href="#cb28-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-253"><a href="#cb28-253" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's now look into selecting different columnns</span></span>
+<span id="cb28-254"><a href="#cb28-254" aria-hidden="true" tabindex="-1"></a><span class="co"># we use the select() function for that </span></span>
+<span id="cb28-255"><a href="#cb28-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-256"><a href="#cb28-256" aria-hidden="true" tabindex="-1"></a><span class="co"># by column name</span></span>
+<span id="cb28-257"><a href="#cb28-257" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(species,island,body_mass_g)</span>
+<span id="cb28-258"><a href="#cb28-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-259"><a href="#cb28-259" aria-hidden="true" tabindex="-1"></a><span class="co"># select by range</span></span>
+<span id="cb28-260"><a href="#cb28-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-261"><a href="#cb28-261" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(bill_length_mm<span class="sc">:</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-262"><a href="#cb28-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-263"><a href="#cb28-263" aria-hidden="true" tabindex="-1"></a><span class="co"># select by column number</span></span>
+<span id="cb28-264"><a href="#cb28-264" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(<span class="dv">1</span>,<span class="dv">7</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-265"><a href="#cb28-265" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-266"><a href="#cb28-266" aria-hidden="true" tabindex="-1"></a><span class="co"># select ALL columns but an exception </span></span>
+<span id="cb28-267"><a href="#cb28-267" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(<span class="sc">-</span>island)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-268"><a href="#cb28-268" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb28-269"><a href="#cb28-269" aria-hidden="true" tabindex="-1"></a><span class="co"># you can use function within select</span></span>
+<span id="cb28-270"><a href="#cb28-270" aria-hidden="true" tabindex="-1"></a><span class="co"># for example starts_with(), ends_with(), contains()</span></span>
+<span id="cb28-271"><a href="#cb28-271" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-272"><a href="#cb28-272" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">select</span>(species,<span class="fu">starts_with</span>(<span class="st">'bill_'</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-273"><a href="#cb28-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-274"><a href="#cb28-274" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-275"><a href="#cb28-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-276"><a href="#cb28-276" aria-hidden="true" tabindex="-1"></a>Now it is on you again, to perform some exercises with the <span class="in">`usability_test_results.csv`</span>. Try do do the following:</span>
+<span id="cb28-277"><a href="#cb28-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-278"><a href="#cb28-278" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Create a data frame that only contains the columns: participant_id, age, and trips per year.</span>
+<span id="cb28-279"><a href="#cb28-279" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Create a data frame that contains column 2 and tot_task3.</span>
+<span id="cb28-280"><a href="#cb28-280" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Create a data frame that contains participant_id and all columns that are related to task1.</span>
+<span id="cb28-281"><a href="#cb28-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-284"><a href="#cb28-284" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-285"><a href="#cb28-285" aria-hidden="true" tabindex="-1"></a><span class="co">#Select participant_id, age and trips per year</span></span>
+<span id="cb28-286"><a href="#cb28-286" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">select</span>(participant_id,age,trips_per_year)</span>
+<span id="cb28-287"><a href="#cb28-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-288"><a href="#cb28-288" aria-hidden="true" tabindex="-1"></a><span class="co">#Select the second and the last column</span></span>
+<span id="cb28-289"><a href="#cb28-289" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">select</span>(<span class="dv">2</span>,tot_task3)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-290"><a href="#cb28-290" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-291"><a href="#cb28-291" aria-hidden="true" tabindex="-1"></a><span class="co">#Select participant_id and all column related to task1</span></span>
+<span id="cb28-292"><a href="#cb28-292" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">select</span>(participant_id,</span>
+<span id="cb28-293"><a href="#cb28-293" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">contains</span>(<span class="st">"task1"</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-294"><a href="#cb28-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-295"><a href="#cb28-295" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's do some renaming of column names </span></span>
+<span id="cb28-296"><a href="#cb28-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-297"><a href="#cb28-297" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">rename</span>(<span class="at">weight=</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb28-298"><a href="#cb28-298" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-299"><a href="#cb28-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-300"><a href="#cb28-300" aria-hidden="true" tabindex="-1"></a><span class="fu">### Data manipulation pipelines</span></span>
+<span id="cb28-301"><a href="#cb28-301" aria-hidden="true" tabindex="-1"></a>You can combine the verbs in any way you want and chain them one after another. E.g. <span class="in">`filter %&gt;% filter %&gt;% select %&gt;% filter`</span> is possible. But be aware to only filter on columns that still exist!</span>
+<span id="cb28-302"><a href="#cb28-302" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-305"><a href="#cb28-305" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb28-306"><a href="#cb28-306" aria-hidden="true" tabindex="-1"></a>penguins_new<span class="ot">&lt;-</span>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(island<span class="sc">==</span><span class="st">'Dream'</span><span class="sc">|</span>island<span class="sc">==</span><span class="st">'Torgersen'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-307"><a href="#cb28-307" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">'male'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-308"><a href="#cb28-308" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">select</span>(species,body_mass_g)</span>
+<span id="cb28-309"><a href="#cb28-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-310"><a href="#cb28-310" aria-hidden="true" tabindex="-1"></a><span class="co"># or an example with the usability_test_results </span></span>
+<span id="cb28-311"><a href="#cb28-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-312"><a href="#cb28-312" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">filter</span>(education<span class="sc">==</span><span class="st">'Bachelor'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-313"><a href="#cb28-313" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">filter</span>(completion_task3<span class="sc">==</span><span class="dv">1</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-314"><a href="#cb28-314" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">select</span>(participant_id)</span>
+<span id="cb28-315"><a href="#cb28-315" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb28-316"><a href="#cb28-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-317"><a href="#cb28-317" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-318"><a href="#cb28-318" aria-hidden="true" tabindex="-1"></a><span class="fu">### Write data to file</span></span>
+<span id="cb28-319"><a href="#cb28-319" aria-hidden="true" tabindex="-1"></a>Finally, we want to write a data to file, so we can reload it later on. We have two options:</span>
+<span id="cb28-320"><a href="#cb28-320" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Write the data to an <span class="in">`.Rdata`</span> file, R's customs binary format, using <span class="in">`write_rds()`</span>. This file can then be loaded via <span class="in">`read_rds()`</span>.</span>
+<span id="cb28-321"><a href="#cb28-321" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Write to a .csv file - increased interoperability and better for sharing with others. <span class="in">`readr`</span> has a specific function that let's you create .csv files that are easy to open in excel: <span class="in">`write_excel_csv()`</span>.</span>
+<span id="cb28-322"><a href="#cb28-322" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-323"><a href="#cb28-323" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,eval=FALSE,echo=TRUE}</span></span>
+<span id="cb28-324"><a href="#cb28-324" aria-hidden="true" tabindex="-1"></a>penguins_new<span class="ot">&lt;-</span>penguins_data<span class="sc">%&gt;%</span><span class="fu">filter</span>(island<span class="sc">==</span><span class="st">'Dream'</span><span class="sc">|</span>island<span class="sc">==</span><span class="st">'Torgersen'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-325"><a href="#cb28-325" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">filter</span>(sex<span class="sc">==</span><span class="st">'male'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-326"><a href="#cb28-326" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">select</span>(species,body_mass_g)</span>
+<span id="cb28-327"><a href="#cb28-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-328"><a href="#cb28-328" aria-hidden="true" tabindex="-1"></a><span class="fu">write_rds</span>(penguins_new,<span class="st">'penguins_new.rds'</span>)</span>
+<span id="cb28-329"><a href="#cb28-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-330"><a href="#cb28-330" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use the usability_test_results </span></span>
+<span id="cb28-331"><a href="#cb28-331" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to get all participants in the age group 22-29</span></span>
+<span id="cb28-332"><a href="#cb28-332" aria-hidden="true" tabindex="-1"></a><span class="co"># We want that they completed task 2 </span></span>
+<span id="cb28-333"><a href="#cb28-333" aria-hidden="true" tabindex="-1"></a><span class="co"># And then we want all columns related to that task (task2)</span></span>
+<span id="cb28-334"><a href="#cb28-334" aria-hidden="true" tabindex="-1"></a>usability_new<span class="ot">&lt;-</span>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb28-335"><a href="#cb28-335" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(age<span class="sc">==</span><span class="st">'22-29'</span>,completion_task2<span class="sc">==</span><span class="st">'1'</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb28-336"><a href="#cb28-336" aria-hidden="true" tabindex="-1"></a>                <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">'task2'</span>))</span>
+<span id="cb28-337"><a href="#cb28-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-338"><a href="#cb28-338" aria-hidden="true" tabindex="-1"></a><span class="fu">write_excel_csv</span>(<span class="at">x =</span> usability_new,<span class="st">'usablity_new.csv'</span>)</span>
+<span id="cb28-339"><a href="#cb28-339" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

@@ -1,0 +1,31 @@
+participant_id,timestamp,age,gender,country_of_nationality,education,trips_per_year,countries_visited,favority_country,preferred_travel_months,completion_task1,seq_task1,tot_task1,completion_task2,seq_task2,tot_task2,completion_task3,seq_task3,tot_task3
+id_1,6/4/2018 5:01:46,22-29,Female,Canada,Bachelor,15,5,Japan,"January, February, March, April, October, November, December",0,6,236,1,6,33,0,4,234
+id_2,5/24/2018 2:22:42,22-29,Female,United States,Bachelor,10,5,Dominican Republic,"January, February, March, April, May, June, July, August, September, October, November, December",0,1,119,1,6,39,0,3,310
+id_3,5/27/2018 22:32:02,51-64,Male,United States,Bachelor,0,18,Bolivia,NA,1,2,31,1,7,43,1,7,124
+id_4,6/1/2018 6:45:18,19-21,Male,United States,Bachelor,5,7,France,"May, June, July, August",1,3,136,1,6,37,1,6,83
+id_5,5/21/2018 23:48:30,30-40,Female,United States,Master,3,18,Taiwan,"April, May, June, September, October",0,3,182,0,4,31,0,4,99
+id_6,5/21/2018 11:56:33,19-21,Female,United States,College / Tradeschool,5,0,NA,"May, June, July, August, December",1,4,206,1,6,38,1,6,135
+id_7,5/21/2018 15:46:56,51-64,Male,United States,College / Tradeschool,4,54,Netherlands,NA,1,5,80,1,6,42,1,6,178
+id_8,6/4/2018 13:55:50,22-29,Female,United States,Bachelor,2,6,Germany,"April, May, June, August, September",0,1,144,1,7,58,1,5,96
+id_9,5/28/2018 20:42:24,22-29,Male,United States,Bachelor,13,30,Cambodia,"March, April, May, June, July, August",1,5,130,1,7,54,1,7,134
+id_10,5/21/2018 19:44:12,22-29,Male,United States,Master,4,26,Germany,"March, April, June",1,2,186,0,5,58,0,5,178
+id_11,5/27/2018 14:16:30,19-21,Female,South Africa,Bachelor,3,25,South Africa,"June, July, December",0,4,178,1,5,44,1,5,92
+id_12,5/31/2018 5:31:32,30-40,Male,United States,Master,3,30,Italy,NA,1,4,187,1,6,32,1,6,73
+id_13,6/5/2018 1:16:43,0-16,Male,United States,Highschool,2,1,Canada,"January, August, December",1,3,204,1,5,42,1,5,97
+id_14,5/31/2018 10:50:26,19-21,Male,Australia,Highschool,NA,NA,NA,NA,0,4,100,1,7,54,1,5,68
+id_15,6/5/2018 6:52:23,22-29,Female,United States,College / Tradeschool,4,12,Spain,"January, March, May, June, July, August, September, November, December",0,2,100,1,6,55,1,6,109
+id_16,5/23/2018 22:03:13,19-21,Male,United States,College / Tradeschool,2,3,Ireland {Republic},NA,0,2,228,1,6,37,1,6,85
+id_17,5/21/2018 19:49:19,19-21,Male,Denmark,Highschool,3,12,United States,NA,1,3,230,1,6,53,1,5,59
+id_18,5/31/2018 20:19:21,22-29,Female,United States,Master,3,5,Japan,"February, March, April, May, June, July, August, September, October, November, December",1,6,82,0,5,34,0,5,145
+id_19,5/27/2018 0:10:33,22-29,Male,United States,Bachelor,3,15,Spain,NA,0,2,175,0,3,49,0,3,81
+id_20,5/23/2018 0:03:09,30-40,Male,Mexico,College / Tradeschool,4,17,Colombia,NA,0,6,38,1,6,45,1,6,160
+id_21,5/23/2018 10:57:49,30-40,Female,Austria,Doctorate / PhD,3,10,Spain,"January, February, March, April, September, October, November, December",1,2,202,1,7,59,1,7,144
+id_22,6/1/2018 10:23:27,22-29,Male,Germany,Master,6,50,China,"January, February, March, April, May, June, July, August, September, October, November, December",1,2,106,1,7,36,1,7,81
+id_23,6/3/2018 15:07:18,22-29,Male,United States,Bachelor,1,13,Spain,"January, February, March, April, May, June, July, August, September, October, November, December",1,1,72,1,6,54,1,6,49
+id_24,5/29/2018 5:40:30,19-21,Male,Nepal,Bachelor,4,NA,NA,NA,1,5,236,1,7,55,1,7,176
+id_25,6/3/2018 17:22:05,22-29,Male,United States,Bachelor,4,5,Japan,"March, April, May, June, September, October, December",1,2,57,1,7,49,1,7,46
+id_26,5/22/2018 17:08:30,22-29,Male,Mexico,Bachelor,2,10,Italy,"January, February, March, April, May, June, July, August, September, October, November, December",0,2,185,1,7,34,0,4,48
+id_27,6/8/2018 2:40:46,22-29,Male,Philippines,Bachelor,1,4,Singapore,"April, May, June",0,4,82,1,7,56,1,7,62
+id_28,5/25/2018 23:54:11,41-50,Female,United States,Master,5,59,Chile,"March, April, October, November",0,3,104,1,7,36,1,7,97
+id_29,6/1/2018 10:37:00,41-50,Male,Denmark,College / Tradeschool,3,30,United States,"January, May, August, September, December",1,4,161,1,6,39,1,6,65
+id_30,5/21/2018 15:48:13,22-29,Male,United States,Bachelor,3,2,Canada,NA,1,5,93,1,6,49,0,3,345

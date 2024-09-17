@@ -4,7 +4,8 @@ title: Part1:Collection, cleaning and transformation
 
 
 ## R basics with `intro_new.R`
-In preparation for the first session, please work yourself through the `intro_new.R` file. You can download the file from [Moodle]() or [from here]().
+In preparation for the first session, please work yourself through the `intro_new.R` file. You can download the file from [Moodle](https://www.moodle.aau.dk/pluginfile.php/3314776/mod_resource/content/0/intro_new.R) or copy paste the parts from here, and put it into a new file.
+You can create a new file in RStudio via `File -> New file -> R Script`.
 
 ```{r,echo=TRUE,eval=FALSE}
 #######
@@ -119,15 +120,21 @@ penguins_data%>%ggplot(aes(species))+geom_bar()
 
 
 ### Importing data from files
-The tidyverse has a package called `readr` that is specifically dedicated to load various kinds of files, e.g. .csv, .tsv, excel   and so on.
+The tidyverse has a package called `readr` that is specifically dedicated to load various kinds of files, e.g. .csv, .tsv, excel and so on. You can also import data from databases (SQLite or no-sql like CouchDB). Let's have a quick look 
+We will perform some exercises with the fake usability test data I mentioned in class. For this purpose please download the file `usability_test_results.csv` [from Moodle](https://www.moodle.aau.dk/mod/resource/view.php?id=1758475).
 
-```{r}
 
+```{r,echo=TRUE, eval=TRUE}
+usability_test_results <- read_csv("usability_test_results.csv")
 
 
 ```
 
 ## Dplyr basics
+Dplyr works with the pipe symbol `%>%`. Usually you start with the data frame that you want to manipulate, followed by the first dplyr verb. E.g: `penguins_data%>%filter()` or `penguins_data%>%select`. You can chain the verbs as much as you want and create data manipulation pipelines. E.g: `penguins_data%>%filter(...)%>%select(...)`. We will see more examples further below. 
+
+
+### Filter()
 Now we get to know the verbs that are part of `dplyr`. We start with the `filter()` function and the different logical operators e.g.`AND, OR, NOT, is.na()`. We will aim at answering the following questions: 
 
 * Find all penguins that were found on island Dream
@@ -138,6 +145,181 @@ Now we get to know the verbs that are part of `dplyr`. We start with the `filter
 
 
 ```{r}
+# We start off by learning about filter()
+
+# We want the ones that lived on island Dream
+penguins_data%>%filter(island=='Dream')%>%view()
+
+# We want the ones heavier than 4kg
+penguins_data%>%filter(body_mass_g>4000)%>%nrow()
+
+# We ant to have all females heavier than 4000
+penguins_data%>%filter(body_mass_g>4000)%>%
+                    filter(sex=='female')%>%view()
+
+# another way is using only one filter
+penguins_data%>%filter(body_mass_g>4000,sex=='female')%>%nrow()
+
+# Are there more male penguins 
+penguins_data%>%filter(body_mass_g>4000,sex=='male')%>%nrow()
+
+# We want to filter out the penguins with missing sex
+penguins_complete_sex<-penguins_data%>%filter(!is.na(sex))
+
+```
+Now we perform some exercises with the `usability_test_results.csv`. We try to answer the following questions:
+
+* Find all participants that are from Denmark
+* Find all participants that successfully completed task 3
+* Find all participants that have a bachelor and whose favorite country is Japan
+* Find all participants whose favorite country is Germany or Italy
+* <mark>Advanced </mark>: Find all participants whose time on task2 
+#lies above the average for that task
+* <mark> Advanced </mark>: Filter based on `%in%`: Exclude participants from United States, Canada Mexico.
+
+```{r}
+# Find all participants that are from Denmark
+usability_test_results%>%filter(country_of_nationality=='Denmark')%>%view()
+
+# Find all participants that successfully completed task 3
+usability_test_results%>%filter(completion_task3==1)%>%view()
+
+# Find all participants that have a bachelor and whose favorite country
+# is Japan
+usability_test_results%>%filter(education=='Bachelor',
+                                favority_country=='Japan')%>%view()
+
+# Find all participants whose favorite country is germany or italy
+usability_test_results%>%
+        filter(favority_country=='Germany'|favority_country=='Italy')%>%view()
+
+#Find all participants whose time on task2 
+#lies above the average for that task
+
+usability_test_results%>%filter(mean(tot_task2)<tot_task2)%>%view()
+
+#Use base are style of writing to calculate an average
+mean(usability_test_results$tot_task2)
+
+# Show an example of how to use %in% to filter by values
+# of a vector
+countries_to_filter<-c('United States','Canada','Mexico')
+
+usability_test_results%>%
+  filter(!country_of_nationality%in%countries_to_filter)%>%
+      view()
 
 
+```
+### Arrange()
+Sorting your data can be important to get an overview of the data but also for certain processing tasks. You can sort using the `arrange()` function. Per default `arrange` sorts ascending i.e. from lowest to highest. Use the `desc()` inside arrange to sort from high to low. 
+
+
+```{r}
+# Now we want to look at sorting data with arrange()
+
+penguins_data%>%arrange(flipper_length_mm)%>%view()
+
+penguins_data%>%arrange(desc(body_mass_g))%>%view()
+
+penguins_data%>%arrange(-body_mass_g)%>%view()
+
+penguins_data%>%arrange(bill_length_mm,bill_depth_mm)%>%view()
+
+
+# Two exercises with the usability_test_data
+
+# Sort the test data based on the country of origin of the participants 
+
+# Sort the test data based on subjective task difficulty (seq_task1)
+usability_test_results%>%arrange(-seq_task1,-seq_task2,-seq_task3)%>%view()
+
+```
+
+### Select()
+It is often the case that you only need a subset of the data for further processing or visualisation. In these situations the `select()` function becomes handy, as it allows us to select only the needed **columns or variables** from the data.frame. `Select()` has many different ways of how it can be used. Here it is worth to [look at the documentation](https://dplyr.tidyverse.org/reference/select.html) to get an overview of what the options are.
+
+```{r}
+# Let's now look into selecting different columnns
+# we use the select() function for that 
+
+# by column name
+penguins_data%>%select(species,island,body_mass_g)
+
+# select by range
+
+penguins_data%>%select(bill_length_mm:body_mass_g)%>%view()
+
+# select by column number
+penguins_data%>%select(1,7)%>%view()
+
+# select ALL columns but an exception 
+penguins_data%>%select(-island)%>%view()
+  
+# you can use function within select
+# for example starts_with(), ends_with(), contains()
+
+penguins_data%>%select(species,starts_with('bill_'))%>%view()
+
+```
+
+Now it is on you again, to perform some exercises with the `usability_test_results.csv`. Try do do the following:
+
+* Create a data frame that only contains the columns: participant_id, age, and trips per year.
+* Create a data frame that contains column 2 and tot_task3.
+* Create a data frame that contains participant_id and all columns that are related to task1.
+
+```{r}
+#Select participant_id, age and trips per year
+usability_test_results%>%select(participant_id,age,trips_per_year)
+
+#Select the second and the last column
+usability_test_results%>%select(2,tot_task3)%>%view()
+
+#Select participant_id and all column related to task1
+usability_test_results%>%select(participant_id,
+                            contains("task1"))%>%view()
+
+# Let's do some renaming of column names 
+
+penguins_data%>%rename(weight=body_mass_g)%>%view()
+```
+
+### Data manipulation pipelines
+You can combine the verbs in any way you want and chain them one after another. E.g. `filter %>% filter %>% select %>% filter` is possible. But be aware to only filter on columns that still exist!
+
+```{r}
+penguins_new<-penguins_data%>%filter(island=='Dream'|island=='Torgersen')%>%
+                                filter(sex=='male')%>%
+                                select(species,body_mass_g)
+
+# or an example with the usability_test_results 
+
+usability_test_results%>%filter(education=='Bachelor')%>%
+                          filter(completion_task3==1)%>%
+                            select(participant_id)
+```
+
+
+### Write data to file
+Finally, we want to write a data to file, so we can reload it later on. We have two options:
+* Write the data to an `.Rdata` file, R's customs binary format, using `write_rds()`. This file can then be loaded via `read_rds()`.
+* Write to a .csv file - increased interoperability and better for sharing with others. `readr` has a specific function that let's you create .csv files that are easy to open in excel: `write_excel_csv()`.
+
+```{r,eval=FALSE,echo=TRUE}
+penguins_new<-penguins_data%>%filter(island=='Dream'|island=='Torgersen')%>%
+                                filter(sex=='male')%>%
+                                select(species,body_mass_g)
+
+write_rds(penguins_new,'penguins_new.rds')
+
+# Let's use the usability_test_results 
+# We want to get all participants in the age group 22-29
+# We want that they completed task 2 
+# And then we want all columns related to that task (task2)
+usability_new<-usability_test_results%>%
+            filter(age=='22-29',completion_task2=='1')%>%
+                select(contains('task2'))
+
+write_excel_csv(x = usability_new,'usablity_new.csv')
 ```

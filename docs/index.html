@@ -211,17 +211,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A core element of the AAU Information Studies degree is learning about data analysis and visualization. To teach you these skills, we use the <a href="https://www.r-project.org/">statistical programming language R</a>. Specifically, we will use the <a href="https://www.tidyverse.org/">Tidyverse</a>, an opinionated collection of R packages that share an underlying design philosophy, grammar, and data structures.</p>
 <section id="about-this-website" class="level2">
 <h2 class="anchored" data-anchor-id="about-this-website">About this website</h2>
-<p>At AAU we use <a href="https://www.moodle.aau.dk/">Moodle</a> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <a href="https://www.moodle.aau.dk/course/view.php?id=51656">Research Methods in Information Studies</a> and <a href="https://www.moodle.aau.dk/course/view.php?id=51654">User Studies and Information Behaviour</a>. This can be confusing, that is why this website is thought to collect all <strong>R related</strong> teaching in one space and covers all aspects that happen in class. <mark>This means, this website is substituting the <strong>course slides</strong>. Material for preparation before class like reading material can be found on Moodle.</mark></p>
+<p>At AAU we use <a href="https://www.moodle.aau.dk/">Moodle</a> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <a href="https://www.moodle.aau.dk/course/view.php?id=51656">Research Methods in Information Studies</a> and <a href="https://www.moodle.aau.dk/course/view.php?id=51654">User Studies and Information Behaviour</a>. This can be confusing, that is why this website is thought to collect all <strong>R related</strong> teaching in one space and covers all aspects that happen in class. <mark>This means, this website is substituting the <strong>course slides</strong>. Additional material for e.g.&nbsp;preparation before class like reading material can be found on Moodle.</mark></p>
 </section>
 <section id="r-and-rstudio-set-up" class="level2">
 <h2 class="anchored" data-anchor-id="r-and-rstudio-set-up">R and RStudio Set-up</h2>
 <p>Chester Ismay and Albert Kim, the authors of <a href="https://moderndive.com/index.html"><em>Moderndive</em></a> an introductory book to Data Science using R and the Tidyverse, describe it like this: R is a programming language that runs computations, while RStudio is an integrated development environment (IDE) that provides an interface by adding many convenient features and tools. You need to install both parts to get everything to work. You can find the links <a href="https://posit.co/download/rstudio-desktop/">to download both from Posit’s website.</a> A detailed guide can also be found on the <a href="https://moderndive.com/1-getting-started.html">Moderndive website.</a></p>
-<p><img src="img/install.png" class="img-fluid"></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://posit.co/download/rstudio-desktop/"><img src="img/install.png" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
 </section>
 <section id="some-general-tips" class="level2">
 <h2 class="anchored" data-anchor-id="some-general-tips">Some general tips</h2>
 <ul>
-<li></li>
+<li>As a beginner it is always good to take a <code>"copy - paste - adpat"</code> approach to coding. Copy code from when you solved the same/similar problems, paste it and adapt it to the current situation (e.g.&nbsp;change the data frame and variable name).This is - especially at the beginning - easier than writing everything from scratch.</li>
+<li>Don’t despair if your code throws an error. You can:
+<ul>
+<li>Put the error message in a search engine and look at the results. Most likely someone had the same issue before and asked about it on <a href="https://stackoverflow.com/">Stackoverflow</a>.</li>
+<li>Use ChatGPT to come up with a suggestion on how to solve the problem.</li>
+</ul></li>
+<li>You want your object (e.g.&nbsp;data.frames, vectors or functions) to be descriptive, so you’ll need a convention for multiple words. <a href="https://r4ds.had.co.nz/workflow-basics.html?q=snake#whats-in-a-name">Hadley Wickham recommends</a> <code>snake_case</code> where you separate lowercase words with <code>_</code>. E.g.:
+<ul>
+<li>penguins_data</li>
+<li>usasbility_test_results_1</li>
+<li>participant_ids</li>
+<li>calc_sus()</li>
+</ul></li>
+<li>… to be continued()</li>
 </ul>
 
 
@@ -532,15 +549,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>A core element of the AAU Information Studies degree is learning about data analysis and visualization. To teach you these skills, we use the <span class="co">[</span><span class="ot">statistical programming language R</span><span class="co">](https://www.r-project.org/)</span>. Specifically, we will use the <span class="co">[</span><span class="ot">Tidyverse</span><span class="co">](https://www.tidyverse.org/)</span>, an opinionated collection of R packages that share an underlying design philosophy, grammar, and data structures. </span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## About this website</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>At AAU we use <span class="co">[</span><span class="ot">Moodle</span><span class="co">](https://www.moodle.aau.dk/)</span> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <span class="co">[</span><span class="ot">Research Methods in Information Studies</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51656)</span> and <span class="co">[</span><span class="ot">User Studies and Information Behaviour</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51654)</span>. This can be confusing, that is why this website is thought to collect all **R related** teaching in one space and covers all aspects that happen in class. &lt;mark&gt;This means, this website is substituting the **course slides**. Material for preparation before class like reading material can be found on Moodle.<span class="kw">&lt;/mark&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>At AAU we use <span class="co">[</span><span class="ot">Moodle</span><span class="co">](https://www.moodle.aau.dk/)</span> to inform you about the different modules, their content and distribute reading and exercise material. We will touch on R in various classes in two different modules <span class="co">[</span><span class="ot">Research Methods in Information Studies</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51656)</span> and <span class="co">[</span><span class="ot">User Studies and Information Behaviour</span><span class="co">](https://www.moodle.aau.dk/course/view.php?id=51654)</span>. This can be confusing, that is why this website is thought to collect all **R related** teaching in one space and covers all aspects that happen in class. &lt;mark&gt;This means, this website is substituting the **course slides**. Additional material for e.g. preparation before class like reading material can be found on Moodle.<span class="kw">&lt;/mark&gt;</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## R and RStudio Set-up</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>Chester Ismay and Albert Kim, the authors of <span class="co">[</span><span class="ot">*Moderndive*</span><span class="co">](https://moderndive.com/index.html)</span> an introductory book to Data Science using R and the Tidyverse, describe it like this: R is a programming language that runs computations, while RStudio is an integrated development environment (IDE) that provides an interface by adding many convenient features and tools. You need to install both parts to get everything to work. You can find the links <span class="co">[</span><span class="ot">to download both from Posit's website.</span><span class="co">](https://posit.co/download/rstudio-desktop/)</span> A detailed guide can also be found on the <span class="co">[</span><span class="ot">Moderndive website.</span><span class="co">](https://moderndive.com/1-getting-started.html)</span> </span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="al">![](img/install.png)</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="al">![](img/install.png)</span><span class="co">](https://posit.co/download/rstudio-desktop/)</span></span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Some general tips</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>As a beginner it is always good to take a <span class="in">`"copy - paste - adpat"`</span> approach to coding. Copy code from when you solved the same/similar problems, paste it and adapt it to the current situation (e.g. change the data frame and variable name).This is - especially at the beginning - easier than writing everything from scratch.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Don't despair if your code throws an error. You can:</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>Put the error message in a search engine and look at the results. Most likely someone had the same issue before and asked about it on <span class="co">[</span><span class="ot">Stackoverflow</span><span class="co">](https://stackoverflow.com/)</span>.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">  * </span>Use ChatGPT to come up with a suggestion on how to solve the problem.</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>You want your object (e.g. data.frames, vectors or functions) to be descriptive, so you’ll need a convention for multiple words. <span class="co">[</span><span class="ot">Hadley Wickham recommends</span><span class="co">](https://r4ds.had.co.nz/workflow-basics.html?q=snake#whats-in-a-name)</span> <span class="in">`snake_case`</span> where you separate lowercase words with <span class="in">`_`</span>. E.g.:</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">  + </span>penguins_data</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="ss">  + </span>usasbility_test_results_1</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="ss">  + </span>participant_ids</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="ss">  + </span>calc_sus()</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>... to be continued()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
