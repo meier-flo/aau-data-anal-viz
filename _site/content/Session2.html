@@ -182,7 +182,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#to-be-done" id="toc-to-be-done" class="nav-link active" data-scroll-target="#to-be-done">TO BE DONE</a></li>
+  <li><a href="#summarise-mutate-and-group_by" id="toc-summarise-mutate-and-group_by" class="nav-link active" data-scroll-target="#summarise-mutate-and-group_by">Summarise(), mutate() and group_by()</a>
+  <ul class="collapse">
+  <li><a href="#summarise" id="toc-summarise" class="nav-link" data-scroll-target="#summarise">Summarise()</a></li>
+  <li><a href="#group_by" id="toc-group_by" class="nav-link" data-scroll-target="#group_by">group_by()</a></li>
+  <li><a href="#mutate" id="toc-mutate" class="nav-link" data-scroll-target="#mutate">mutate()</a></li>
+  </ul></li>
+  <li><a href="#tidy-data-principles-and-tidyr" id="toc-tidy-data-principles-and-tidyr" class="nav-link" data-scroll-target="#tidy-data-principles-and-tidyr">Tidy data principles and tidyr</a>
+  <ul class="collapse">
+  <li><a href="#the-relig_income-case" id="toc-the-relig_income-case" class="nav-link" data-scroll-target="#the-relig_income-case">The <code>relig_income</code> case</a></li>
+  <li><a href="#the-us_rent_income-case" id="toc-the-us_rent_income-case" class="nav-link" data-scroll-target="#the-us_rent_income-case">The <code>us_rent_income</code> case</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/meier-flo/aau-data-anal-viz/blob/main/content/Session2.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/meier-flo/aau-data-anal-viz/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -191,7 +201,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Part2:Collection, cleaning and transformation</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Part2:Collection, cleaning and transformation</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -206,12 +216,485 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="to-be-done" class="level2">
-<h2 class="anchored" data-anchor-id="to-be-done">TO BE DONE</h2>
+<section id="summarise-mutate-and-group_by" class="level1">
+<h1>Summarise(), mutate() and group_by()</h1>
+<p>Now we look at dplyr functions that allow you to create something new. <code>Summarise()</code> and <code>mutate()</code> are the two functions that allow you to do that: You can either create a complete new data.frame/tibble (<code>summarise()</code>) or by adding a new column to the existing data.frame you are working with (<code>mutate()</code>). Common data operations are calculating descriptive statistics like the average using <code>mean()</code>, the median (<code>median()</code>) or finding the minimum and the maximum of values (<code>min()</code> and <code>max()</code>). Have a look at the functions below. You will find many more and more <a href="https://dplyr.tidyverse.org/reference/summarise.html">information in the dyplr/summarise documentation</a> or the <a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate documentation</a>.</p>
+<p>Most data operations are done on groups defined by variables. <code>group_by()</code> takes an existing data.frame and converts it into a grouped one where operations are performed “by group”.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://dplyr.tidyverse.org/reference/summarise.html#useful-functions"><img src="../content/img/summarise-mutate-functions.png" class="img-fluid figure-img" style="width:30.0%"></a></p>
+</figure>
+</div>
+<section id="summarise" class="level2">
+<h2 class="anchored" data-anchor-id="summarise">Summarise()</h2>
+<p>Let’s start with some basic summarising tasks, where we always create a simple dataframe as outcome. Using the <code>penguins_data</code>, let’s assume we want to solve the following questions/tasks:</p>
+<ul>
+<li>What is the average body_mass_g of the penguins?</li>
+<li>Count the number of different/unique islands the penguins were recorded.</li>
+<li>Create a summary table (min,max,mean,median,IQR) for flipper_length_mm</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the na.rm=TRUE argument for the mean - if one value is NA you need to remove it otherwise the outcome will be NA </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg=</span><span class="fu">mean</span>(body_mass_g,<span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+    avg
+  &lt;dbl&gt;
+1 4202.</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">unique_islands =</span> <span class="fu">n_distinct</span>(island))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  unique_islands
+           &lt;int&gt;
+1              3</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary table</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that summary(flipper_length_mm) will give you all the information too</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># But we do it the dplyr way ... here more code but in the long run easier</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Still it is not forbidden to use base r :)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># How could we avoid having to write na.rm=TRUE so many times?</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">min_fl =</span> <span class="fu">min</span>(flipper_length_mm,<span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                          <span class="at">max_fl =</span> <span class="fu">max</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                          <span class="at">avg_fl =</span> <span class="fu">mean</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                          <span class="at">median_fl =</span> <span class="fu">median</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">IQR_fl =</span> <span class="fu">IQR</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  min_fl max_fl avg_fl median_fl IQR_fl
+   &lt;int&gt;  &lt;int&gt;  &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+1    172    231   201.       197     23</code></pre>
+</div>
+</div>
+<p>Now it is on you again to perform some exercise with the <code>usability_test_results</code>:</p>
+<ul>
+<li>Count how many different countries the parcipants come from</li>
+<li>Calculate the average number of trips they do and how many countries they have visited</li>
+<li>Calculate the average and median task completion (tot_task*) for each task.</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 30 Columns: 19
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (8): participant_id, timestamp, age, gender, country_of_nationality, ed...
+dbl (11): trips_per_year, countries_visited, completion_task1, seq_task1, to...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">nunique_countries =</span> <span class="fu">n_distinct</span>(country_of_nationality))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  nunique_countries
+              &lt;int&gt;
+1                10</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">avg_trip =</span> <span class="fu">mean</span>(trips_per_year),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">avg_countries_vis =</span> <span class="fu">mean</span>(countries_visited))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  avg_trip avg_countries_vis
+     &lt;dbl&gt;             &lt;dbl&gt;
+1       NA                NA</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg_tot_task1 =</span> <span class="fu">mean</span>(tot_task1,<span class="at">na.rm=</span><span class="cn">NA</span>),</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">median_tot_task1 =</span> <span class="fu">median</span>(tot_task1,<span class="at">na.rm=</span><span class="cn">TRUE</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="group_by" class="level2">
+<h2 class="anchored" data-anchor-id="group_by">group_by()</h2>
+<p>Most data operations are done on groups defined by variables. <code>group_by()</code> takes an existing data.frame and converts it into a grouped one where operations are performed “by group”. Using <code>group_by()</code> before <code>summarise()</code> creates a summary for each group. Each group has then a new row in the resulting data.frame. You can also find more information on what it means to group data in the <a href="https://dplyr.tidyverse.org/articles/grouping.html">tidyverse documentation</a>.</p>
+<p>Let’s see <code>group_by()</code> in action in combination with <code>summarise()</code> by working on the following tasks: * What is the average weight for each penguin species and how many observations do we have? * How many penguins were found on each of the three different islands? * How many penguins <em>from different species</em> were found on each of the three different islands?</p>
+<p>A short version for <code>group_by(...)%&gt;%summarise(n())</code> is <code>count()</code></p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's have a look at group_by()</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average weight per species and how many penguins there are  </span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">avg_weight=</span><span class="fu">mean</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">count_penguins =</span><span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  species   avg_weight count_penguins
+  &lt;fct&gt;          &lt;dbl&gt;          &lt;int&gt;
+1 Adelie         3701.            152
+2 Chinstrap      3733.             68
+3 Gentoo         5076.            124</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how many penguins were found on the different islands </span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">group_by</span>(island)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">count_per_island =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  island    count_per_island
+  &lt;fct&gt;                &lt;int&gt;
+1 Biscoe                 168
+2 Dream                  124
+3 Torgersen               52</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># group_by() can take multiple variables</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">group_by</span>(species,island)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">count_island_species =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'species'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   species [3]
+  species   island    count_island_species
+  &lt;fct&gt;     &lt;fct&gt;                    &lt;int&gt;
+1 Adelie    Biscoe                      44
+2 Adelie    Dream                       56
+3 Adelie    Torgersen                   52
+4 Chinstrap Dream                       68
+5 Gentoo    Biscoe                     124</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count() is the shorter version of group_by() and summarise(n())</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">count</span>(species,island)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to know the average body_weight_g for each species</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg_weight=</span><span class="fu">mean</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  species   avg_weight
+  &lt;fct&gt;          &lt;dbl&gt;
+1 Adelie         3701.
+2 Chinstrap      3733.
+3 Gentoo         5076.</code></pre>
+</div>
+</div>
+<p>Now it is again on you to perform some exercises with the <code>usability_test_results</code>: * How many participants are there for each education level? * Count how many participants per country_of_nationality there are * Calculate the average number of countries visited by gender * Calculate the number of participants per gender and country of nationality</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how many participants per each education there are </span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">count</span>(education,<span class="at">name=</span><span class="st">"count_edu"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  education             count_edu
+  &lt;chr&gt;                     &lt;int&gt;
+1 Bachelor                     14
+2 College / Tradeschool         6
+3 Doctorate / PhD               1
+4 Highschool                    3
+5 Master                        6</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">group_by</span>(education)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">count_edu=</span><span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  education             count_edu
+  &lt;chr&gt;                     &lt;int&gt;
+1 Bachelor                     14
+2 College / Tradeschool         6
+3 Doctorate / PhD               1
+4 Highschool                    3
+5 Master                        6</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how many participants per country_of_nationality there are </span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">count</span>(country_of_nationality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+   country_of_nationality     n
+   &lt;chr&gt;                  &lt;int&gt;
+ 1 Australia                  1
+ 2 Austria                    1
+ 3 Canada                     1
+ 4 Denmark                    2
+ 5 Germany                    1
+ 6 Mexico                     2
+ 7 Nepal                      1
+ 8 Philippines                1
+ 9 South Africa               1
+10 United States             19</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average number of countries visited by gender</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(gender)<span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">avg_countries_visited=</span><span class="fu">mean</span>(countries_visited,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  gender avg_countries_visited
+  &lt;chr&gt;                  &lt;dbl&gt;
+1 Female                  14.5
+2 Male                    18.2</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of participants per gender and country of nationality </span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#usability_test_results%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  group_by(gender,country_of_nationality)%&gt;%mutate(gender_country_n=n())</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">count</span>(gender,country_of_nationality)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   gender country_of_nationality     n
+   &lt;chr&gt;  &lt;chr&gt;                  &lt;int&gt;
+ 1 Female Austria                    1
+ 2 Female Canada                     1
+ 3 Female South Africa               1
+ 4 Female United States              7
+ 5 Male   Australia                  1
+ 6 Male   Denmark                    2
+ 7 Male   Germany                    1
+ 8 Male   Mexico                     2
+ 9 Male   Nepal                      1
+10 Male   Philippines                1
+11 Male   United States             12</code></pre>
+</div>
+</div>
+</section>
+<section id="mutate" class="level2">
+<h2 class="anchored" data-anchor-id="mutate">mutate()</h2>
+<p>mutate() creates new columns that are functions of existing variables. It can also modify (if the name is the same as an existing column) existing columns. In the second case you just overwrite the original data, with the new data.</p>
+<p>Here are some examples with the <code>penguins_data</code>:</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's finally look at mutate </span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># which gives us the options to create new columns </span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>               <span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">avg_weight =</span> <span class="fu">mean</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 9
+# Groups:   species [3]
+   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g
+   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt;
+ 1 Adelie  Torgersen           39.1          18.7               181        3750
+ 2 Adelie  Torgersen           39.5          17.4               186        3800
+ 3 Adelie  Torgersen           40.3          18                 195        3250
+ 4 Adelie  Torgersen           NA            NA                  NA          NA
+ 5 Adelie  Torgersen           36.7          19.3               193        3450
+ 6 Adelie  Torgersen           39.3          20.6               190        3650
+ 7 Adelie  Torgersen           38.9          17.8               181        3625
+ 8 Adelie  Torgersen           39.2          19.6               195        4675
+ 9 Adelie  Torgersen           34.1          18.1               193        3475
+10 Adelie  Torgersen           42            20.2               190        4250
+# ℹ 334 more rows
+# ℹ 3 more variables: sex &lt;fct&gt;, year &lt;int&gt;, avg_weight &lt;dbl&gt;</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">ratio_flipper_weight =</span> flipper_length_mm<span class="sc">/</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Two classic examples that you use <code>mutate()</code> for are: calculating percentage values and recode entries. Recoding often happens by using the <code>case_when()</code> helper function.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of common problem where you want percentages for a count data frame</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="co"># First count then create a new percentage column with mutate</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">count</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">percentage =</span> n<span class="sc">/</span><span class="fu">sum</span>(n)<span class="sc">*</span><span class="dv">100</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the longer version</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">species_count =</span><span class="fu">n</span>())<span class="sc">%&gt;%</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">total_sample =</span> <span class="fu">sum</span>(species_count))<span class="sc">%&gt;%</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">percentage =</span> species_count<span class="sc">/</span>total_sample)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use the median to decide whether penguins are light or heavy</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">median_weight =</span> <span class="fu">median</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">weight_category =</span> <span class="fu">case_when</span>(</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>                                          body_mass_g<span class="sc">&lt;</span>median_weight <span class="sc">~</span> <span class="st">'light_penguin'</span>,</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>                                          body_mass_g<span class="sc">&gt;</span>median_weight <span class="sc">~</span> <span class="st">'heavy_penguin'</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(species,weight_category)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 344 × 2
+   species weight_category
+   &lt;fct&gt;   &lt;chr&gt;          
+ 1 Adelie  light_penguin  
+ 2 Adelie  light_penguin  
+ 3 Adelie  light_penguin  
+ 4 Adelie  &lt;NA&gt;           
+ 5 Adelie  light_penguin  
+ 6 Adelie  light_penguin  
+ 7 Adelie  light_penguin  
+ 8 Adelie  heavy_penguin  
+ 9 Adelie  light_penguin  
+10 Adelie  heavy_penguin  
+# ℹ 334 more rows</code></pre>
+</div>
+</div>
+<p>Now it is on you to perform some exercises. Perform the following tasks:</p>
+<ul>
+<li>Transform the tot_task1 from seconds to minutes</li>
+<li>Calculate the total time on tasks for each participant</li>
+<li>Calculate the average subjective difficulty for each participant</li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the tot_task1 from seconds into minutes </span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">tot_task1_min=</span>tot_task1<span class="sc">/</span><span class="dv">60</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total time on task for each participant (tot_task1, 2, 3)</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">total_task_time =</span> tot_task1<span class="sc">+</span>tot_task2<span class="sc">+</span>tot_task3)<span class="sc">%&gt;%</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">view</span>()</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co"># avg subjective difficulty</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">avg_sub_diff =</span> (seq_task1<span class="sc">+</span>seq_task2<span class="sc">+</span>seq_task3)<span class="sc">/</span><span class="dv">3</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="tidy-data-principles-and-tidyr" class="level1">
+<h1>Tidy data principles and tidyr</h1>
+<p>The goal of tidyr is to help you create tidy data. Tidy data is data where:</p>
+<ol type="1">
+<li>Each variable is a column; each column is a variable.</li>
+<li>Each observation is a row; each row is an observation.</li>
+<li>Each value is a cell; each cell is a single value.</li>
+</ol>
+<p>tidyr functions fall into five main categories:</p>
+<ul>
+<li>Pivoting which converts between long and wide forms.</li>
+<li>Rectangling, which turns deeply nested lists (as from JSON) into tidy tibbles.</li>
+<li>Nesting converts grouped data to a form where each group becomes a single row containing a nested data frame, and unnesting does the opposite.</li>
+<li>Splitting and combining character columns using <code>separate()</code>.</li>
+<li>Make implicit missing values explicit with <code>complete()</code>.</li>
+</ul>
+<p>For now we focus on <em>pivoting</em>. The two most important functions are <code>pivot_wider()</code> which takes long data split over multiple rows and creates new columns. And <code>pivot_longer()</code> which takes wide data with many columns and transforms them into multiple rows. Look at the following examples</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidy-data and tidyr functions</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="do">################</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Let's look at tidyr </span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>table4a<span class="ot">&lt;-</span>table4a</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># This table needs to be turned from wide into long format </span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>table4a<span class="sc">%&gt;%</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>country,</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">names_to =</span> <span class="st">'year'</span>,</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">'cases'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>table2<span class="ot">&lt;-</span>table2                       </span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Table2 has observation spread over multiple rows </span></span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a><span class="co"># We need to transform it from the long format into the wide format to</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a><span class="co"># make it tidy</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>table2<span class="sc">%&gt;%</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> type,<span class="at">values_from =</span> count)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="the-relig_income-case" class="level2">
+<h2 class="anchored" data-anchor-id="the-relig_income-case">The <code>relig_income</code> case</h2>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># relig_income:column headers are values not variable names-&gt;we need to make a wide data.frame longer</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="co"># relig_income is messy / not tidy ... how can we make it tidy?</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>relig_income<span class="ot">&lt;-</span>relig_income</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>relig_income<span class="sc">%&gt;%</span><span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">names_to =</span> <span class="st">'income_range'</span>,</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">values_to =</span><span class="st">'count'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 180 × 3
+   religion income_range       count
+   &lt;chr&gt;    &lt;chr&gt;              &lt;dbl&gt;
+ 1 Agnostic &lt;$10k                 27
+ 2 Agnostic $10-20k               34
+ 3 Agnostic $20-30k               60
+ 4 Agnostic $30-40k               81
+ 5 Agnostic $40-50k               76
+ 6 Agnostic $50-75k              137
+ 7 Agnostic $75-100k             122
+ 8 Agnostic $100-150k            109
+ 9 Agnostic &gt;150k                 84
+10 Agnostic Don't know/refused    96
+# ℹ 170 more rows</code></pre>
+</div>
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now one could count the total per religious belief </span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>relig_income<span class="sc">%&gt;%</span><span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                              <span class="at">names_to =</span> <span class="st">'income_range'</span>,</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">values_to =</span><span class="st">'count'</span>)<span class="sc">%&gt;%</span><span class="fu">group_by</span>(religion)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">total_part=</span><span class="fu">sum</span>(count))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="the-us_rent_income-case" class="level2">
+<h2 class="anchored" data-anchor-id="the-us_rent_income-case">The <code>us_rent_income</code> case</h2>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#us_rent_income:one observation over multiple rows - &gt;we need to make a long data.frame wider</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>us_rent_income<span class="ot">&lt;-</span>us_rent_income</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>us_rent_income<span class="sc">%&gt;%</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">values_from =</span> <span class="fu">c</span>(<span class="st">'estimate'</span>,<span class="st">'moe'</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -511,14 +994,289 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Part2:Collection, cleaning and transformation</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">## TO BE DONE</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb43" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Part2:Collection, cleaning and transformation</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># Summarise(), mutate() and group_by()</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>Now we look at dplyr functions that allow you to create something new.</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="in">`Summarise()`</span> and <span class="in">`mutate()`</span> are the two functions that allow you to do that: You can either create a complete new data.frame/tibble (<span class="in">`summarise()`</span>) or by adding a new column to the existing data.frame you are working with (<span class="in">`mutate()`</span>). Common data operations are calculating descriptive statistics like the average using <span class="in">`mean()`</span>, the median (<span class="in">`median()`</span>) or finding the minimum and the maximum of values (<span class="in">`min()`</span> and <span class="in">`max()`</span>). Have a look at the functions below. You will find many more and more <span class="co">[</span><span class="ot">information in the dyplr/summarise documentation</span><span class="co">](https://dplyr.tidyverse.org/reference/summarise.html)</span> or the <span class="co">[</span><span class="ot">mutate documentation</span><span class="co">](https://dplyr.tidyverse.org/reference/mutate.html)</span>.</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>Most data operations are done on groups defined by variables. <span class="in">`group_by()`</span> takes an existing data.frame and converts it into a grouped one where operations are performed "by group".</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="al">![](/content/img/summarise-mutate-functions.png)</span><span class="ot">{width=30%}</span><span class="co">](https://dplyr.tidyverse.org/reference/summarise.html#useful-functions)</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summarise()</span></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>Let's start with some basic summarising tasks, where we always create a simple dataframe as outcome. </span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>Using the <span class="in">`penguins_data`</span>, let's assume we want to solve the following questions/tasks:</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>What is the average body_mass_g of the penguins?</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Count the number of different/unique islands the penguins were recorded.</span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Create a summary table (min,max,mean,median,IQR) for flipper_length_mm</span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=FALSE,eval=TRUE,message=FALSE}</span></span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("palmerpenguins")</span></span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(palmerpenguins)</span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="ot">&lt;-</span>penguins</span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-31"><a href="#cb43-31" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-32"><a href="#cb43-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the na.rm=TRUE argument for the mean - if one value is NA you need to remove it otherwise the outcome will be NA </span></span>
+<span id="cb43-33"><a href="#cb43-33" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg=</span><span class="fu">mean</span>(body_mass_g,<span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb43-34"><a href="#cb43-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-35"><a href="#cb43-35" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">unique_islands =</span> <span class="fu">n_distinct</span>(island))</span>
+<span id="cb43-36"><a href="#cb43-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-37"><a href="#cb43-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary table</span></span>
+<span id="cb43-38"><a href="#cb43-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that summary(flipper_length_mm) will give you all the information too</span></span>
+<span id="cb43-39"><a href="#cb43-39" aria-hidden="true" tabindex="-1"></a><span class="co"># But we do it the dplyr way ... here more code but in the long run easier</span></span>
+<span id="cb43-40"><a href="#cb43-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Still it is not forbidden to use base r :)</span></span>
+<span id="cb43-41"><a href="#cb43-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-42"><a href="#cb43-42" aria-hidden="true" tabindex="-1"></a><span class="co"># How could we avoid having to write na.rm=TRUE so many times?</span></span>
+<span id="cb43-43"><a href="#cb43-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-44"><a href="#cb43-44" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">min_fl =</span> <span class="fu">min</span>(flipper_length_mm,<span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb43-45"><a href="#cb43-45" aria-hidden="true" tabindex="-1"></a>                          <span class="at">max_fl =</span> <span class="fu">max</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb43-46"><a href="#cb43-46" aria-hidden="true" tabindex="-1"></a>                          <span class="at">avg_fl =</span> <span class="fu">mean</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb43-47"><a href="#cb43-47" aria-hidden="true" tabindex="-1"></a>                          <span class="at">median_fl =</span> <span class="fu">median</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb43-48"><a href="#cb43-48" aria-hidden="true" tabindex="-1"></a>                          <span class="at">IQR_fl =</span> <span class="fu">IQR</span>(flipper_length_mm,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb43-49"><a href="#cb43-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-50"><a href="#cb43-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-51"><a href="#cb43-51" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-52"><a href="#cb43-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-53"><a href="#cb43-53" aria-hidden="true" tabindex="-1"></a>Now it is on you again to perform some exercise with the <span class="in">`usability_test_results`</span>:</span>
+<span id="cb43-54"><a href="#cb43-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-55"><a href="#cb43-55" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Count how many different countries the parcipants come from</span>
+<span id="cb43-56"><a href="#cb43-56" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Calculate the average number of trips they do and how many countries they have visited</span>
+<span id="cb43-57"><a href="#cb43-57" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Calculate the average and median task completion (tot_task*) for each task.</span>
+<span id="cb43-58"><a href="#cb43-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-59"><a href="#cb43-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=FALSE, eval=TRUE}</span></span>
+<span id="cb43-60"><a href="#cb43-60" aria-hidden="true" tabindex="-1"></a>usability_test_results <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"usability_test_results.csv"</span>)</span>
+<span id="cb43-61"><a href="#cb43-61" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-62"><a href="#cb43-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-65"><a href="#cb43-65" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-66"><a href="#cb43-66" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">nunique_countries =</span> <span class="fu">n_distinct</span>(country_of_nationality))</span>
+<span id="cb43-67"><a href="#cb43-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-68"><a href="#cb43-68" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb43-69"><a href="#cb43-69" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">avg_trip =</span> <span class="fu">mean</span>(trips_per_year),</span>
+<span id="cb43-70"><a href="#cb43-70" aria-hidden="true" tabindex="-1"></a>              <span class="at">avg_countries_vis =</span> <span class="fu">mean</span>(countries_visited))</span>
+<span id="cb43-71"><a href="#cb43-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-72"><a href="#cb43-72" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg_tot_task1 =</span> <span class="fu">mean</span>(tot_task1,<span class="at">na.rm=</span><span class="cn">NA</span>),</span>
+<span id="cb43-73"><a href="#cb43-73" aria-hidden="true" tabindex="-1"></a>                         <span class="at">median_tot_task1 =</span> <span class="fu">median</span>(tot_task1,<span class="at">na.rm=</span><span class="cn">TRUE</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-74"><a href="#cb43-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-75"><a href="#cb43-75" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-76"><a href="#cb43-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-77"><a href="#cb43-77" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-78"><a href="#cb43-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-79"><a href="#cb43-79" aria-hidden="true" tabindex="-1"></a><span class="fu">## group_by()</span></span>
+<span id="cb43-80"><a href="#cb43-80" aria-hidden="true" tabindex="-1"></a>Most data operations are done on groups defined by variables. <span class="in">`group_by()`</span> takes an existing data.frame and converts it into a grouped one where operations are performed "by group". Using <span class="in">`group_by()`</span> before <span class="in">`summarise()`</span> creates a summary for each group. Each group has then a new row in the resulting data.frame. </span>
+<span id="cb43-81"><a href="#cb43-81" aria-hidden="true" tabindex="-1"></a>You can also find more information on what it means to group data in the <span class="co">[</span><span class="ot">tidyverse documentation</span><span class="co">](https://dplyr.tidyverse.org/articles/grouping.html)</span>.</span>
+<span id="cb43-82"><a href="#cb43-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-83"><a href="#cb43-83" aria-hidden="true" tabindex="-1"></a>Let's see <span class="in">`group_by()`</span> in action in combination with <span class="in">`summarise()`</span> by working on</span>
+<span id="cb43-84"><a href="#cb43-84" aria-hidden="true" tabindex="-1"></a>the following tasks:</span>
+<span id="cb43-85"><a href="#cb43-85" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>What is the average weight for each penguin species and how many observations do we have?</span>
+<span id="cb43-86"><a href="#cb43-86" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>How many penguins were found on each of the three different islands?</span>
+<span id="cb43-87"><a href="#cb43-87" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>How many penguins *from different species* were found on each of the three different islands?</span>
+<span id="cb43-88"><a href="#cb43-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-89"><a href="#cb43-89" aria-hidden="true" tabindex="-1"></a>A short version for <span class="in">`group_by(...)%&gt;%summarise(n())`</span> is <span class="in">`count()`</span></span>
+<span id="cb43-90"><a href="#cb43-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-93"><a href="#cb43-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-94"><a href="#cb43-94" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's have a look at group_by()</span></span>
+<span id="cb43-95"><a href="#cb43-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-96"><a href="#cb43-96" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average weight per species and how many penguins there are  </span></span>
+<span id="cb43-97"><a href="#cb43-97" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb43-98"><a href="#cb43-98" aria-hidden="true" tabindex="-1"></a>          <span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb43-99"><a href="#cb43-99" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">avg_weight=</span><span class="fu">mean</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>),</span>
+<span id="cb43-100"><a href="#cb43-100" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">count_penguins =</span><span class="fu">n</span>())</span>
+<span id="cb43-101"><a href="#cb43-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-102"><a href="#cb43-102" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how many penguins were found on the different islands </span></span>
+<span id="cb43-103"><a href="#cb43-103" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">group_by</span>(island)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">count_per_island =</span> <span class="fu">n</span>())</span>
+<span id="cb43-104"><a href="#cb43-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-105"><a href="#cb43-105" aria-hidden="true" tabindex="-1"></a><span class="co"># group_by() can take multiple variables</span></span>
+<span id="cb43-106"><a href="#cb43-106" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">group_by</span>(species,island)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">count_island_species =</span> <span class="fu">n</span>())</span>
+<span id="cb43-107"><a href="#cb43-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-108"><a href="#cb43-108" aria-hidden="true" tabindex="-1"></a><span class="co"># count() is the shorter version of group_by() and summarise(n())</span></span>
+<span id="cb43-109"><a href="#cb43-109" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">count</span>(species,island)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-110"><a href="#cb43-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-111"><a href="#cb43-111" aria-hidden="true" tabindex="-1"></a><span class="co"># We want to know the average body_weight_g for each species</span></span>
+<span id="cb43-112"><a href="#cb43-112" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg_weight=</span><span class="fu">mean</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb43-113"><a href="#cb43-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-114"><a href="#cb43-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-115"><a href="#cb43-115" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-116"><a href="#cb43-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-117"><a href="#cb43-117" aria-hidden="true" tabindex="-1"></a>Now it is again on you to perform some exercises with the <span class="in">`usability_test_results`</span>:</span>
+<span id="cb43-118"><a href="#cb43-118" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>How many participants are there for each education level?</span>
+<span id="cb43-119"><a href="#cb43-119" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Count how many participants per country_of_nationality there are </span>
+<span id="cb43-120"><a href="#cb43-120" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Calculate the average number of countries visited by gender</span>
+<span id="cb43-121"><a href="#cb43-121" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Calculate the number of participants per gender and country of nationality</span>
+<span id="cb43-122"><a href="#cb43-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-125"><a href="#cb43-125" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-126"><a href="#cb43-126" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how many participants per each education there are </span></span>
+<span id="cb43-127"><a href="#cb43-127" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">count</span>(education,<span class="at">name=</span><span class="st">"count_edu"</span>)</span>
+<span id="cb43-128"><a href="#cb43-128" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">group_by</span>(education)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">count_edu=</span><span class="fu">n</span>())</span>
+<span id="cb43-129"><a href="#cb43-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-130"><a href="#cb43-130" aria-hidden="true" tabindex="-1"></a><span class="co"># Count how many participants per country_of_nationality there are </span></span>
+<span id="cb43-131"><a href="#cb43-131" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">count</span>(country_of_nationality)</span>
+<span id="cb43-132"><a href="#cb43-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-133"><a href="#cb43-133" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the average number of countries visited by gender</span></span>
+<span id="cb43-134"><a href="#cb43-134" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb43-135"><a href="#cb43-135" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(gender)<span class="sc">%&gt;%</span></span>
+<span id="cb43-136"><a href="#cb43-136" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">avg_countries_visited=</span><span class="fu">mean</span>(countries_visited,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb43-137"><a href="#cb43-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-138"><a href="#cb43-138" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-139"><a href="#cb43-139" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the number of participants per gender and country of nationality </span></span>
+<span id="cb43-140"><a href="#cb43-140" aria-hidden="true" tabindex="-1"></a><span class="co">#usability_test_results%&gt;%</span></span>
+<span id="cb43-141"><a href="#cb43-141" aria-hidden="true" tabindex="-1"></a><span class="co">#  group_by(gender,country_of_nationality)%&gt;%mutate(gender_country_n=n())</span></span>
+<span id="cb43-142"><a href="#cb43-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-143"><a href="#cb43-143" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">count</span>(gender,country_of_nationality)</span>
+<span id="cb43-144"><a href="#cb43-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-145"><a href="#cb43-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-146"><a href="#cb43-146" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-147"><a href="#cb43-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-148"><a href="#cb43-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## mutate()</span></span>
+<span id="cb43-149"><a href="#cb43-149" aria-hidden="true" tabindex="-1"></a>mutate() creates new columns that are functions of existing variables. It can also modify (if the name is the same as an existing column) existing columns. In the second case you just overwrite the original data, with the new data. </span>
+<span id="cb43-150"><a href="#cb43-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-151"><a href="#cb43-151" aria-hidden="true" tabindex="-1"></a>Here are some examples with the <span class="in">`penguins_data`</span>:</span>
+<span id="cb43-152"><a href="#cb43-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-155"><a href="#cb43-155" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-156"><a href="#cb43-156" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's finally look at mutate </span></span>
+<span id="cb43-157"><a href="#cb43-157" aria-hidden="true" tabindex="-1"></a><span class="co"># which gives us the options to create new columns </span></span>
+<span id="cb43-158"><a href="#cb43-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-159"><a href="#cb43-159" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb43-160"><a href="#cb43-160" aria-hidden="true" tabindex="-1"></a>               <span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb43-161"><a href="#cb43-161" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">avg_weight =</span> <span class="fu">mean</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb43-162"><a href="#cb43-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-163"><a href="#cb43-163" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb43-164"><a href="#cb43-164" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">ratio_flipper_weight =</span> flipper_length_mm<span class="sc">/</span>body_mass_g)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-165"><a href="#cb43-165" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-166"><a href="#cb43-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-167"><a href="#cb43-167" aria-hidden="true" tabindex="-1"></a>Two classic examples that you use <span class="in">`mutate()`</span> for are: calculating percentage values and recode entries. Recoding often happens by using the <span class="in">`case_when()`</span> helper function.</span>
+<span id="cb43-168"><a href="#cb43-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-171"><a href="#cb43-171" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-172"><a href="#cb43-172" aria-hidden="true" tabindex="-1"></a><span class="co"># Example of common problem where you want percentages for a count data frame</span></span>
+<span id="cb43-173"><a href="#cb43-173" aria-hidden="true" tabindex="-1"></a><span class="co"># First count then create a new percentage column with mutate</span></span>
+<span id="cb43-174"><a href="#cb43-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-175"><a href="#cb43-175" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb43-176"><a href="#cb43-176" aria-hidden="true" tabindex="-1"></a>        <span class="fu">count</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb43-177"><a href="#cb43-177" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">percentage =</span> n<span class="sc">/</span><span class="fu">sum</span>(n)<span class="sc">*</span><span class="dv">100</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-178"><a href="#cb43-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-179"><a href="#cb43-179" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the longer version</span></span>
+<span id="cb43-180"><a href="#cb43-180" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span></span>
+<span id="cb43-181"><a href="#cb43-181" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(species)<span class="sc">%&gt;%</span></span>
+<span id="cb43-182"><a href="#cb43-182" aria-hidden="true" tabindex="-1"></a>              <span class="fu">summarise</span>(<span class="at">species_count =</span><span class="fu">n</span>())<span class="sc">%&gt;%</span></span>
+<span id="cb43-183"><a href="#cb43-183" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">total_sample =</span> <span class="fu">sum</span>(species_count))<span class="sc">%&gt;%</span></span>
+<span id="cb43-184"><a href="#cb43-184" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">percentage =</span> species_count<span class="sc">/</span>total_sample)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-185"><a href="#cb43-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-186"><a href="#cb43-186" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's use the median to decide whether penguins are light or heavy</span></span>
+<span id="cb43-187"><a href="#cb43-187" aria-hidden="true" tabindex="-1"></a>penguins_data<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">median_weight =</span> <span class="fu">median</span>(body_mass_g,<span class="at">na.rm=</span><span class="cn">TRUE</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb43-188"><a href="#cb43-188" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">weight_category =</span> <span class="fu">case_when</span>(</span>
+<span id="cb43-189"><a href="#cb43-189" aria-hidden="true" tabindex="-1"></a>                                          body_mass_g<span class="sc">&lt;</span>median_weight <span class="sc">~</span> <span class="st">'light_penguin'</span>,</span>
+<span id="cb43-190"><a href="#cb43-190" aria-hidden="true" tabindex="-1"></a>                                          body_mass_g<span class="sc">&gt;</span>median_weight <span class="sc">~</span> <span class="st">'heavy_penguin'</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb43-191"><a href="#cb43-191" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(species,weight_category)</span>
+<span id="cb43-192"><a href="#cb43-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-193"><a href="#cb43-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-194"><a href="#cb43-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-195"><a href="#cb43-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-196"><a href="#cb43-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-197"><a href="#cb43-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-198"><a href="#cb43-198" aria-hidden="true" tabindex="-1"></a>Now it is on you to perform some exercises. Perform the following tasks:</span>
+<span id="cb43-199"><a href="#cb43-199" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-200"><a href="#cb43-200" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Transform the tot_task1 from seconds to minutes</span>
+<span id="cb43-201"><a href="#cb43-201" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Calculate the total time on tasks for each participant</span>
+<span id="cb43-202"><a href="#cb43-202" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Calculate the average subjective difficulty for each participant </span>
+<span id="cb43-203"><a href="#cb43-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-204"><a href="#cb43-204" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-207"><a href="#cb43-207" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-208"><a href="#cb43-208" aria-hidden="true" tabindex="-1"></a><span class="co"># Transform the tot_task1 from seconds into minutes </span></span>
+<span id="cb43-209"><a href="#cb43-209" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb43-210"><a href="#cb43-210" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">tot_task1_min=</span>tot_task1<span class="sc">/</span><span class="dv">60</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-211"><a href="#cb43-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-212"><a href="#cb43-212" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the total time on task for each participant (tot_task1, 2, 3)</span></span>
+<span id="cb43-213"><a href="#cb43-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-214"><a href="#cb43-214" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span></span>
+<span id="cb43-215"><a href="#cb43-215" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">total_task_time =</span> tot_task1<span class="sc">+</span>tot_task2<span class="sc">+</span>tot_task3)<span class="sc">%&gt;%</span></span>
+<span id="cb43-216"><a href="#cb43-216" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">view</span>()</span>
+<span id="cb43-217"><a href="#cb43-217" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-218"><a href="#cb43-218" aria-hidden="true" tabindex="-1"></a><span class="co"># avg subjective difficulty</span></span>
+<span id="cb43-219"><a href="#cb43-219" aria-hidden="true" tabindex="-1"></a>usability_test_results<span class="sc">%&gt;%</span><span class="fu">mutate</span>(<span class="at">avg_sub_diff =</span> (seq_task1<span class="sc">+</span>seq_task2<span class="sc">+</span>seq_task3)<span class="sc">/</span><span class="dv">3</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-220"><a href="#cb43-220" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-221"><a href="#cb43-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-222"><a href="#cb43-222" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-223"><a href="#cb43-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-224"><a href="#cb43-224" aria-hidden="true" tabindex="-1"></a><span class="fu"># Tidy data principles and tidyr</span></span>
+<span id="cb43-225"><a href="#cb43-225" aria-hidden="true" tabindex="-1"></a>The goal of tidyr is to help you create tidy data. Tidy data is data where:</span>
+<span id="cb43-226"><a href="#cb43-226" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-227"><a href="#cb43-227" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>Each variable is a column; each column is a variable.</span>
+<span id="cb43-228"><a href="#cb43-228" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>Each observation is a row; each row is an observation.</span>
+<span id="cb43-229"><a href="#cb43-229" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>Each value is a cell; each cell is a single value.</span>
+<span id="cb43-230"><a href="#cb43-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-231"><a href="#cb43-231" aria-hidden="true" tabindex="-1"></a>tidyr functions fall into five main categories:</span>
+<span id="cb43-232"><a href="#cb43-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-233"><a href="#cb43-233" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Pivoting which converts between long and wide forms.</span>
+<span id="cb43-234"><a href="#cb43-234" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Rectangling, which turns deeply nested lists (as from JSON) into tidy tibbles.</span>
+<span id="cb43-235"><a href="#cb43-235" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Nesting converts grouped data to a form where each group becomes a single row containing a nested data frame, and unnesting does the opposite.</span>
+<span id="cb43-236"><a href="#cb43-236" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Splitting and combining character columns using <span class="in">`separate()`</span>.</span>
+<span id="cb43-237"><a href="#cb43-237" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Make implicit missing values explicit with <span class="in">`complete()`</span>.</span>
+<span id="cb43-238"><a href="#cb43-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-239"><a href="#cb43-239" aria-hidden="true" tabindex="-1"></a>For now we focus on *pivoting*. The two most important functions are <span class="in">`pivot_wider()`</span> which takes long data split over multiple rows and creates new columns. And <span class="in">`pivot_longer()`</span> which takes wide data with many columns and transforms them into multiple rows. Look at the following examples </span>
+<span id="cb43-240"><a href="#cb43-240" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-241"><a href="#cb43-241" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-244"><a href="#cb43-244" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-245"><a href="#cb43-245" aria-hidden="true" tabindex="-1"></a><span class="co"># Tidy-data and tidyr functions</span></span>
+<span id="cb43-246"><a href="#cb43-246" aria-hidden="true" tabindex="-1"></a><span class="do">################</span></span>
+<span id="cb43-247"><a href="#cb43-247" aria-hidden="true" tabindex="-1"></a><span class="do">## Let's look at tidyr </span></span>
+<span id="cb43-248"><a href="#cb43-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-249"><a href="#cb43-249" aria-hidden="true" tabindex="-1"></a>table4a<span class="ot">&lt;-</span>table4a</span>
+<span id="cb43-250"><a href="#cb43-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-251"><a href="#cb43-251" aria-hidden="true" tabindex="-1"></a><span class="co"># This table needs to be turned from wide into long format </span></span>
+<span id="cb43-252"><a href="#cb43-252" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-253"><a href="#cb43-253" aria-hidden="true" tabindex="-1"></a>table4a<span class="sc">%&gt;%</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>country,</span>
+<span id="cb43-254"><a href="#cb43-254" aria-hidden="true" tabindex="-1"></a>                       <span class="at">names_to =</span> <span class="st">'year'</span>,</span>
+<span id="cb43-255"><a href="#cb43-255" aria-hidden="true" tabindex="-1"></a>                            <span class="at">values_to =</span> <span class="st">'cases'</span>)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-256"><a href="#cb43-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-257"><a href="#cb43-257" aria-hidden="true" tabindex="-1"></a>table2<span class="ot">&lt;-</span>table2                       </span>
+<span id="cb43-258"><a href="#cb43-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-259"><a href="#cb43-259" aria-hidden="true" tabindex="-1"></a><span class="co"># Table2 has observation spread over multiple rows </span></span>
+<span id="cb43-260"><a href="#cb43-260" aria-hidden="true" tabindex="-1"></a><span class="co"># We need to transform it from the long format into the wide format to</span></span>
+<span id="cb43-261"><a href="#cb43-261" aria-hidden="true" tabindex="-1"></a><span class="co"># make it tidy</span></span>
+<span id="cb43-262"><a href="#cb43-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-263"><a href="#cb43-263" aria-hidden="true" tabindex="-1"></a>table2<span class="sc">%&gt;%</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> type,<span class="at">values_from =</span> count)<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-264"><a href="#cb43-264" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-265"><a href="#cb43-265" aria-hidden="true" tabindex="-1"></a><span class="co">#---------------------</span></span>
+<span id="cb43-266"><a href="#cb43-266" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-267"><a href="#cb43-267" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-268"><a href="#cb43-268" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `relig_income` case</span></span>
+<span id="cb43-269"><a href="#cb43-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-272"><a href="#cb43-272" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-273"><a href="#cb43-273" aria-hidden="true" tabindex="-1"></a><span class="co"># relig_income:column headers are values not variable names-&gt;we need to make a wide data.frame longer</span></span>
+<span id="cb43-274"><a href="#cb43-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-275"><a href="#cb43-275" aria-hidden="true" tabindex="-1"></a><span class="co"># relig_income is messy / not tidy ... how can we make it tidy?</span></span>
+<span id="cb43-276"><a href="#cb43-276" aria-hidden="true" tabindex="-1"></a>relig_income<span class="ot">&lt;-</span>relig_income</span>
+<span id="cb43-277"><a href="#cb43-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-278"><a href="#cb43-278" aria-hidden="true" tabindex="-1"></a>relig_income<span class="sc">%&gt;%</span><span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb43-279"><a href="#cb43-279" aria-hidden="true" tabindex="-1"></a>                              <span class="at">names_to =</span> <span class="st">'income_range'</span>,</span>
+<span id="cb43-280"><a href="#cb43-280" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">values_to =</span><span class="st">'count'</span>)</span>
+<span id="cb43-281"><a href="#cb43-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-282"><a href="#cb43-282" aria-hidden="true" tabindex="-1"></a><span class="co"># Now one could count the total per religious belief </span></span>
+<span id="cb43-283"><a href="#cb43-283" aria-hidden="true" tabindex="-1"></a>relig_income<span class="sc">%&gt;%</span><span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="dv">2</span><span class="sc">:</span><span class="dv">11</span>,</span>
+<span id="cb43-284"><a href="#cb43-284" aria-hidden="true" tabindex="-1"></a>                              <span class="at">names_to =</span> <span class="st">'income_range'</span>,</span>
+<span id="cb43-285"><a href="#cb43-285" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">values_to =</span><span class="st">'count'</span>)<span class="sc">%&gt;%</span><span class="fu">group_by</span>(religion)<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">total_part=</span><span class="fu">sum</span>(count))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-286"><a href="#cb43-286" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-287"><a href="#cb43-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-288"><a href="#cb43-288" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-289"><a href="#cb43-289" aria-hidden="true" tabindex="-1"></a><span class="fu">## The `us_rent_income` case</span></span>
+<span id="cb43-292"><a href="#cb43-292" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb43-293"><a href="#cb43-293" aria-hidden="true" tabindex="-1"></a><span class="co">#us_rent_income:one observation over multiple rows - &gt;we need to make a long data.frame wider</span></span>
+<span id="cb43-294"><a href="#cb43-294" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-295"><a href="#cb43-295" aria-hidden="true" tabindex="-1"></a>us_rent_income<span class="ot">&lt;-</span>us_rent_income</span>
+<span id="cb43-296"><a href="#cb43-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-297"><a href="#cb43-297" aria-hidden="true" tabindex="-1"></a>us_rent_income<span class="sc">%&gt;%</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> variable,</span>
+<span id="cb43-298"><a href="#cb43-298" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">values_from =</span> <span class="fu">c</span>(<span class="st">'estimate'</span>,<span class="st">'moe'</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb43-299"><a href="#cb43-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-300"><a href="#cb43-300" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb43-301"><a href="#cb43-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-302"><a href="#cb43-302" aria-hidden="true" tabindex="-1"></a></span>
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

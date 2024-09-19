@@ -2,8 +2,282 @@
 title: Part2:Collection, cleaning and transformation
 ---
 
-## TO BE DONE
+# Summarise(), mutate() and group_by()
+Now we look at dplyr functions that allow you to create something new.
+`Summarise()` and `mutate()` are the two functions that allow you to do that: You can either create a complete new data.frame/tibble (`summarise()`) or by adding a new column to the existing data.frame you are working with (`mutate()`). Common data operations are calculating descriptive statistics like the average using `mean()`, the median (`median()`) or finding the minimum and the maximum of values (`min()` and `max()`). Have a look at the functions below. You will find many more and more [information in the dyplr/summarise documentation](https://dplyr.tidyverse.org/reference/summarise.html) or the [mutate documentation](https://dplyr.tidyverse.org/reference/mutate.html).
 
+Most data operations are done on groups defined by variables. `group_by()` takes an existing data.frame and converts it into a grouped one where operations are performed "by group".
+
+[![](/content/img/summarise-mutate-functions.png){width=30%}](https://dplyr.tidyverse.org/reference/summarise.html#useful-functions)
+
+## Summarise()
+Let's start with some basic summarising tasks, where we always create a simple dataframe as outcome. 
+Using the `penguins_data`, let's assume we want to solve the following questions/tasks:
+
+* What is the average body_mass_g of the penguins?
+* Count the number of different/unique islands the penguins were recorded.
+* Create a summary table (min,max,mean,median,IQR) for flipper_length_mm
+
+```{r,echo=FALSE,eval=TRUE,message=FALSE}
+#install.packages("tidyverse")
+#install.packages("palmerpenguins")
+require(tidyverse)
+require(palmerpenguins)
+penguins_data<-penguins
+```
+
+```{r}
+# Note the na.rm=TRUE argument for the mean - if one value is NA you need to remove it otherwise the outcome will be NA 
+penguins_data%>%summarise(avg=mean(body_mass_g,na.rm = TRUE))
+
+penguins_data%>%summarise(unique_islands = n_distinct(island))
+
+# Summary table
+# Note that summary(flipper_length_mm) will give you all the information too
+# But we do it the dplyr way ... here more code but in the long run easier
+# Still it is not forbidden to use base r :)
+
+# How could we avoid having to write na.rm=TRUE so many times?
+
+penguins_data%>%summarise(min_fl = min(flipper_length_mm,na.rm = TRUE),
+                          max_fl = max(flipper_length_mm,na.rm=TRUE),
+                          avg_fl = mean(flipper_length_mm,na.rm=TRUE),
+                          median_fl = median(flipper_length_mm,na.rm=TRUE),
+                          IQR_fl = IQR(flipper_length_mm,na.rm=TRUE))
+
+
+```
+
+Now it is on you again to perform some exercise with the `usability_test_results`:
+
+* Count how many different countries the parcipants come from
+* Calculate the average number of trips they do and how many countries they have visited
+* Calculate the average and median task completion (tot_task*) for each task.
+
+```{r,echo=FALSE, eval=TRUE}
+usability_test_results <- read_csv("usability_test_results.csv")
+```
+
+```{r}
+usability_test_results%>%summarise(nunique_countries = n_distinct(country_of_nationality))
+
+usability_test_results%>%
+              summarise(avg_trip = mean(trips_per_year),
+              avg_countries_vis = mean(countries_visited))
+
+usability_test_results%>%summarise(avg_tot_task1 = mean(tot_task1,na.rm=NA),
+                         median_tot_task1 = median(tot_task1,na.rm=TRUE))%>%view()
+
+```
+
+
+
+## group_by()
+Most data operations are done on groups defined by variables. `group_by()` takes an existing data.frame and converts it into a grouped one where operations are performed "by group". Using `group_by()` before `summarise()` creates a summary for each group. Each group has then a new row in the resulting data.frame. 
+You can also find more information on what it means to group data in the [tidyverse documentation](https://dplyr.tidyverse.org/articles/grouping.html).
+
+Let's see `group_by()` in action in combination with `summarise()` by working on
+the following tasks:
+* What is the average weight for each penguin species and how many observations do we have?
+* How many penguins were found on each of the three different islands?
+* How many penguins *from different species* were found on each of the three different islands?
+
+A short version for `group_by(...)%>%summarise(n())` is `count()`
+
+```{r}
+# Let's have a look at group_by()
+
+# Calculate the average weight per species and how many penguins there are  
+penguins_data%>%
+          group_by(species)%>%
+              summarise(avg_weight=mean(body_mass_g,na.rm=TRUE),
+                                            count_penguins =n())
+
+# Count how many penguins were found on the different islands 
+penguins_data%>%group_by(island)%>%summarise(count_per_island = n())
+
+# group_by() can take multiple variables
+penguins_data%>%group_by(species,island)%>%summarise(count_island_species = n())
+
+# count() is the shorter version of group_by() and summarise(n())
+penguins_data%>%count(species,island)%>%view()
+
+# We want to know the average body_weight_g for each species
+penguins_data%>%group_by(species)%>%summarise(avg_weight=mean(body_mass_g,na.rm=TRUE))
+
+
+```
+
+Now it is again on you to perform some exercises with the `usability_test_results`:
+* How many participants are there for each education level?
+* Count how many participants per country_of_nationality there are 
+* Calculate the average number of countries visited by gender
+* Calculate the number of participants per gender and country of nationality
+
+```{r}
+# Count how many participants per each education there are 
+usability_test_results%>%count(education,name="count_edu")
+usability_test_results%>%group_by(education)%>%summarise(count_edu=n())
+
+# Count how many participants per country_of_nationality there are 
+usability_test_results%>%count(country_of_nationality)
+
+# Calculate the average number of countries visited by gender
+usability_test_results%>%
+            group_by(gender)%>%
+              summarise(avg_countries_visited=mean(countries_visited,na.rm=TRUE))
+
+
+# Calculate the number of participants per gender and country of nationality 
+#usability_test_results%>%
+#  group_by(gender,country_of_nationality)%>%mutate(gender_country_n=n())
+
+usability_test_results%>%count(gender,country_of_nationality)
+
+
+```
+
+## mutate()
+mutate() creates new columns that are functions of existing variables. It can also modify (if the name is the same as an existing column) existing columns. In the second case you just overwrite the original data, with the new data. 
+
+Here are some examples with the `penguins_data`:
+
+```{r}
+# Let's finally look at mutate 
+# which gives us the options to create new columns 
+
+penguins_data%>%
+               group_by(species)%>%
+                  mutate(avg_weight = mean(body_mass_g,na.rm=TRUE))
+
+penguins_data%>%
+              mutate(ratio_flipper_weight = flipper_length_mm/body_mass_g)%>%view()
+```
+
+Two classic examples that you use `mutate()` for are: calculating percentage values and recode entries. Recoding often happens by using the `case_when()` helper function.
+
+```{r}
+# Example of common problem where you want percentages for a count data frame
+# First count then create a new percentage column with mutate
+
+penguins_data%>%
+        count(species)%>%
+          mutate(percentage = n/sum(n)*100)%>%view()
+
+# This is the longer version
+penguins_data%>%
+            group_by(species)%>%
+              summarise(species_count =n())%>%
+                mutate(total_sample = sum(species_count))%>%
+                  mutate(percentage = species_count/total_sample)%>%view()
+
+# Let's use the median to decide whether penguins are light or heavy
+penguins_data%>%mutate(median_weight = median(body_mass_g,na.rm=TRUE))%>%
+                  mutate(weight_category = case_when(
+                                          body_mass_g<median_weight ~ 'light_penguin',
+                                          body_mass_g>median_weight ~ 'heavy_penguin'))%>%
+    select(species,weight_category)
+
+
+
+
+```
+
+Now it is on you to perform some exercises. Perform the following tasks:
+
+* Transform the tot_task1 from seconds to minutes
+* Calculate the total time on tasks for each participant
+* Calculate the average subjective difficulty for each participant 
+
+
+```{r}
+# Transform the tot_task1 from seconds into minutes 
+usability_test_results%>%
+                  mutate(tot_task1_min=tot_task1/60)%>%view()
+
+# Calculate the total time on task for each participant (tot_task1, 2, 3)
+
+usability_test_results%>%
+                mutate(total_task_time = tot_task1+tot_task2+tot_task3)%>%
+                  view()
+
+# avg subjective difficulty
+usability_test_results%>%mutate(avg_sub_diff = (seq_task1+seq_task2+seq_task3)/3)%>%view()
+
+
+```
+
+# Tidy data principles and tidyr
+The goal of tidyr is to help you create tidy data. Tidy data is data where:
+
+1. Each variable is a column; each column is a variable.
+2. Each observation is a row; each row is an observation.
+3. Each value is a cell; each cell is a single value.
+
+tidyr functions fall into five main categories:
+
+* Pivoting which converts between long and wide forms.
+* Rectangling, which turns deeply nested lists (as from JSON) into tidy tibbles.
+* Nesting converts grouped data to a form where each group becomes a single row containing a nested data frame, and unnesting does the opposite.
+* Splitting and combining character columns using `separate()`.
+* Make implicit missing values explicit with `complete()`.
+
+For now we focus on *pivoting*. The two most important functions are `pivot_wider()` which takes long data split over multiple rows and creates new columns. And `pivot_longer()` which takes wide data with many columns and transforms them into multiple rows. Look at the following examples 
+
+
+```{r}
+# Tidy-data and tidyr functions
+################
+## Let's look at tidyr 
+
+table4a<-table4a
+
+# This table needs to be turned from wide into long format 
+
+table4a%>%pivot_longer(cols = -country,
+                       names_to = 'year',
+                            values_to = 'cases')%>%view()
+
+table2<-table2                       
+
+# Table2 has observation spread over multiple rows 
+# We need to transform it from the long format into the wide format to
+# make it tidy
+
+table2%>%pivot_wider(names_from = type,values_from = count)%>%view()
+
+#---------------------
+```
+
+## The `relig_income` case
+
+```{r}
+# relig_income:column headers are values not variable names->we need to make a wide data.frame longer
+
+# relig_income is messy / not tidy ... how can we make it tidy?
+relig_income<-relig_income
+
+relig_income%>%pivot_longer(cols=2:11,
+                              names_to = 'income_range',
+                                  values_to ='count')
+
+# Now one could count the total per religious belief 
+relig_income%>%pivot_longer(cols=2:11,
+                              names_to = 'income_range',
+                                  values_to ='count')%>%group_by(religion)%>%summarise(total_part=sum(count))%>%view()
+```
+
+
+## The `us_rent_income` case
+```{r}
+#us_rent_income:one observation over multiple rows - >we need to make a long data.frame wider
+
+us_rent_income<-us_rent_income
+
+us_rent_income%>%pivot_wider(names_from = variable,
+                                  values_from = c('estimate','moe'))%>%view()
+
+```
 
 
 
