@@ -182,7 +182,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#to-be-done" id="toc-to-be-done" class="nav-link active" data-scroll-target="#to-be-done">TO BE DONE</a></li>
+  <li><a href="#social-media-data-collection" id="toc-social-media-data-collection" class="nav-link active" data-scroll-target="#social-media-data-collection">Social media data collection</a>
+  <ul class="collapse">
+  <li><a href="#redditextractor" id="toc-redditextractor" class="nav-link" data-scroll-target="#redditextractor">RedditExtractoR</a>
+  <ul class="collapse">
+  <li><a href="#packages-needed" id="toc-packages-needed" class="nav-link" data-scroll-target="#packages-needed">Packages needed</a></li>
+  </ul></li>
+  <li><a href="#show-and-tell-with-rdreams" id="toc-show-and-tell-with-rdreams" class="nav-link" data-scroll-target="#show-and-tell-with-rdreams">Show and tell with <code>r/Dreams</code></a></li>
+  <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/meier-flo/aau-data-anal-viz/blob/main/content/Session3.qmd" class="toc-action">View source</a></p><p><a href="https://github.com/meier-flo/aau-data-anal-viz/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -191,7 +199,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Data collection:crawling social media (Reddit)</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Data collection:crawling social media (Reddit)</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
 
 
@@ -206,12 +214,103 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="to-be-done" class="level2">
-<h2 class="anchored" data-anchor-id="to-be-done">TO BE DONE</h2>
+<section id="social-media-data-collection" class="level1">
+<h1>Social media data collection</h1>
+<p>Social media data plays an important role in many disciplines outside and inside academia ranging from marketing to computational social science or digital methods. Unfortunately, the last couple of years have seen the rise of the post-API (application programming interface) era, in which it is getting more and more challenging to get programmatic and legal access to data from social media platforms like Facebook, Instagram or X (Twitter). Reddit remains (with limitations) the only platform where API access is still available.</p>
+<section id="redditextractor" class="level2">
+<h2 class="anchored" data-anchor-id="redditextractor">RedditExtractoR</h2>
+<p><a href="https://github.com/ivan-rivera/RedditExtractor">RedditExtractorR</a> is an R package for extracting data out of Reddit. It allows you to:</p>
+<ul>
+<li>find subreddits based on a search query (<code>find_subrredits()</code>)</li>
+<li>find a user and their Reddit history (<code>get_user_content()</code>)</li>
+<li>find URLs to threads/posts (<code>find_thread_urls()</code>) of interest and retrieve comments out of these threads/posts (<code>get_thread_content()</code>)</li>
+</ul>
+<section id="packages-needed" class="level3">
+<h3 class="anchored" data-anchor-id="packages-needed">Packages needed</h3>
+<p>For this session, you will have to install the two packages <code>RedditExtractoR</code> and <code>tidytext</code>. While we collect some Reddit posts we will perform some very basic text mining using <code>tidytext</code>.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RedditExtractoR"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidytext"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(RedditExtractoR)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidytext)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="show-and-tell-with-rdreams" class="level2">
+<h2 class="anchored" data-anchor-id="show-and-tell-with-rdreams">Show and tell with <code>r/Dreams</code></h2>
+<p>The subrredit <code>r/Dreams</code> is a community of redditors that share their dreams, discuss their meaning and ask for interpretation. Data from this subreddit has, for example, been used in a study by <a href="https://doi.org/10.1098/rsos.192080">Fogli et al.&nbsp;(2020)</a> where they try to investigate the ‘continuity hypothesis’ meaning that dreams are a continuation of what happens in everyday life.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We extract posts from the subreddit r/Dreams</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>r_dreams<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'Dreams'</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's see what the average number of posts per day is</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>r_dreams<span class="sc">%&gt;%</span><span class="fu">count</span>(date_utc)<span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_n_posts_day =</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(n,<span class="at">na.rm=</span><span class="cn">TRUE</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's compare different ways of setting the time parameter</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>r_dreams_week<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'Dreams'</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>                                <span class="at">period =</span> <span class="st">'week'</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>r_dreams_all<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'Dreams'</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                               <span class="at">period =</span> <span class="st">'all'</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># How many comments do posts on average receive?</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>r_dreams_all<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg_comment_count =</span> <span class="fu">mean</span>(comments,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Note that the function <code>find_thread_urls()</code> has two parameters <code>sort_by</code> and <code>period</code>. Per default we get <code>sort_by=top</code> posts per <code>period = month</code>.</p>
+<p>Besides of looking at threads/posts alone, we can also get all comments that a post received. For this we can pass one or multiple URLs (i.e.&nbsp;links to posts) into the function <code>get_thread_content()</code>. The outcome is a list with two elements. One of these elements is a dataframe that contains all comments.</p>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We can extract all comments for a certain post</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>extract_comments<span class="ot">&lt;-</span><span class="fu">get_thread_content</span>(<span class="at">urls =</span> <span class="st">'https://www.reddit.com/r/Dreams/comments/l7rlpb/i_had_a_dream_i_was_attending_a_geometry_class/'</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Remember that the outcome is a list with two dataframes</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># We want the second data frame called comments</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>post_comments<span class="ot">&lt;-</span>extract_comments<span class="sc">$</span>comments</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># extracting one column from a data frame can be done</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># with dollar notation r_dreams_all$url</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># or the pull function from dplyr  </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>get_all_comments<span class="ot">&lt;-</span><span class="fu">get_thread_content</span>(<span class="at">urls =</span> r_dreams_all<span class="sc">%&gt;%</span><span class="fu">pull</span>(<span class="st">'url'</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># We use the unnest_tokens function </span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#to get the count of the words                    </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>r_dreams_all<span class="sc">%&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(<span class="at">input =</span> title,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>                <span class="at">output =</span> word)<span class="sc">%&gt;%</span><span class="fu">count</span>(word,<span class="at">sort=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="exercise" class="level2">
+<h2 class="anchored" data-anchor-id="exercise">Exercise</h2>
+<ul>
+<li>Collect some threads from the subrreddit <strong>r/haiku</strong>. What are the most frequent words that appear in the poems?</li>
+<li>Use the function to extract all posts from user <strong>u/mvea</strong></li>
+</ul>
+<div class="cell">
+<details open="">
+<summary>Show/Hide Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>r_haiku_all<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'haiku'</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">period =</span> <span class="st">'all'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>user_mvea<span class="ot">&lt;-</span><span class="fu">get_user_content</span>(<span class="at">users =</span> <span class="st">'mvea'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 
 
 <!-- -->
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -511,16 +610,100 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Data collection:crawling social media (Reddit)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## TO BE DONE </span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Data collection:crawling social media (Reddit)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu"># Social media data collection</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>Social media data plays an important role in many disciplines outside and inside academia ranging from marketing to computational social science or digital methods. Unfortunately, the last couple of years have seen the rise of the post-API (application programming interface) era, in which it is getting more and more challenging to get programmatic and legal access to data from social media platforms like Facebook, Instagram or X (Twitter). Reddit remains (with limitations) the only platform where API access is still available. </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## RedditExtractoR</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">RedditExtractorR</span><span class="co">](https://github.com/ivan-rivera/RedditExtractor)</span> is an R package for extracting data out of Reddit. It allows you to:</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>find subreddits based on a search query (<span class="in">`find_subrredits()`</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>find a user and their Reddit history (<span class="in">`get_user_content()`</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>find URLs to threads/posts (<span class="in">`find_thread_urls()`</span>) of interest and retrieve comments out of these threads/posts (<span class="in">`get_thread_content()`</span>)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Packages needed</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>For this session, you will have to install the two packages <span class="in">`RedditExtractoR`</span> and <span class="in">`tidytext`</span>. While we collect some Reddit posts we will perform some very basic text mining using <span class="in">`tidytext`</span>. </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=FALSE,eval=TRUE,message=FALSE}</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("palmerpenguins")</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(RedditExtractoR)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidytext)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"RedditExtractoR"</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidytext"</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(RedditExtractoR)</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidytext)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span>(tidyverse)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="fu">## Show and tell with `r/Dreams`</span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>The subrredit <span class="in">`r/Dreams`</span> is a community of redditors that share their dreams, discuss their meaning and ask for interpretation. Data from this subreddit has, for example, been used in a study by <span class="co">[</span><span class="ot">Fogli et al. (2020)</span><span class="co">](https://doi.org/10.1098/rsos.192080)</span> where they try to investigate the 'continuity hypothesis' meaning that dreams are a continuation of what happens in everyday life. </span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co"># We extract posts from the subreddit r/Dreams</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>r_dreams<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'Dreams'</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's see what the average number of posts per day is</span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>r_dreams<span class="sc">%&gt;%</span><span class="fu">count</span>(date_utc)<span class="sc">%&gt;%</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_n_posts_day =</span> </span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mean</span>(n,<span class="at">na.rm=</span><span class="cn">TRUE</span>))<span class="sc">%&gt;%</span><span class="fu">view</span>()</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's compare different ways of setting the time parameter</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>r_dreams_week<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'Dreams'</span>,</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>                                <span class="at">period =</span> <span class="st">'week'</span>)</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>r_dreams_all<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'Dreams'</span>,</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>                               <span class="at">period =</span> <span class="st">'all'</span>)</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="co"># How many comments do posts on average receive?</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>r_dreams_all<span class="sc">%&gt;%</span><span class="fu">summarise</span>(<span class="at">avg_comment_count =</span> <span class="fu">mean</span>(comments,<span class="at">na.rm=</span><span class="cn">TRUE</span>))</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>Note that the function <span class="in">`find_thread_urls()`</span> has two parameters <span class="in">`sort_by`</span> and <span class="in">`period`</span>. Per default we get <span class="in">`sort_by=top`</span> posts per <span class="in">`period = month`</span>.</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>Besides of looking at threads/posts alone, we can also get all comments that a post received. For this we can pass one or multiple URLs (i.e. links to posts) into the function <span class="in">`get_thread_content()`</span>. The outcome is a list with two elements. One of these elements is a dataframe that contains all comments.</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="in">```{r, echo=TRUE,eval=FALSE}</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="co"># We can extract all comments for a certain post</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>extract_comments<span class="ot">&lt;-</span><span class="fu">get_thread_content</span>(<span class="at">urls =</span> <span class="st">'https://www.reddit.com/r/Dreams/comments/l7rlpb/i_had_a_dream_i_was_attending_a_geometry_class/'</span>)</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Remember that the outcome is a list with two dataframes</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="co"># We want the second data frame called comments</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>post_comments<span class="ot">&lt;-</span>extract_comments<span class="sc">$</span>comments</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="co"># extracting one column from a data frame can be done</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="co"># with dollar notation r_dreams_all$url</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="co"># or the pull function from dplyr  </span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>get_all_comments<span class="ot">&lt;-</span><span class="fu">get_thread_content</span>(<span class="at">urls =</span> r_dreams_all<span class="sc">%&gt;%</span><span class="fu">pull</span>(<span class="st">'url'</span>))</span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a><span class="co"># We use the unnest_tokens function </span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a><span class="co">#to get the count of the words                    </span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>r_dreams_all<span class="sc">%&gt;%</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(<span class="at">input =</span> title,</span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>                <span class="at">output =</span> word)<span class="sc">%&gt;%</span><span class="fu">count</span>(word,<span class="at">sort=</span><span class="cn">TRUE</span>)</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="fu">## Exercise</span></span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Collect some threads from the subrreddit **r/haiku**. What are the most frequent words that appear in the poems?</span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a><span class="ss">* </span>Use the function to extract all posts from user **u/mvea**</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a><span class="in">```{r,echo=TRUE,eval=FALSE}</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>r_haiku_all<span class="ot">&lt;-</span><span class="fu">find_thread_urls</span>(<span class="at">subreddit =</span> <span class="st">'haiku'</span>,</span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>                               <span class="at">period =</span> <span class="st">'all'</span>)</span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>user_mvea<span class="ot">&lt;-</span><span class="fu">get_user_content</span>(<span class="at">users =</span> <span class="st">'mvea'</span>)</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

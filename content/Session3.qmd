@@ -1,11 +1,95 @@
 ---
 title: Data collection:crawling social media (Reddit)
 ---
+# Social media data collection
+Social media data plays an important role in many disciplines outside and inside academia ranging from marketing to computational social science or digital methods. Unfortunately, the last couple of years have seen the rise of the post-API (application programming interface) era, in which it is getting more and more challenging to get programmatic and legal access to data from social media platforms like Facebook, Instagram or X (Twitter). Reddit remains (with limitations) the only platform where API access is still available. 
+
+## RedditExtractoR
+[RedditExtractorR](https://github.com/ivan-rivera/RedditExtractor) is an R package for extracting data out of Reddit. It allows you to:
+
+* find subreddits based on a search query (`find_subrredits()`)
+* find a user and their Reddit history (`get_user_content()`)
+* find URLs to threads/posts (`find_thread_urls()`) of interest and retrieve comments out of these threads/posts (`get_thread_content()`)
 
 
+### Packages needed
+For this session, you will have to install the two packages `RedditExtractoR` and `tidytext`. While we collect some Reddit posts we will perform some very basic text mining using `tidytext`. 
 
-## TO BE DONE 
+```{r,echo=FALSE,eval=TRUE,message=FALSE}
+#install.packages("tidyverse")
+#install.packages("palmerpenguins")
+require(RedditExtractoR)
+require(tidytext)
+require(tidyverse)
+```
 
+```{r,echo=TRUE,eval=FALSE}
+install.packages("RedditExtractoR")
+install.packages("tidytext")
+require(RedditExtractoR)
+require(tidytext)
+require(tidyverse)
+```
 
+## Show and tell with `r/Dreams`
+The subrredit `r/Dreams` is a community of redditors that share their dreams, discuss their meaning and ask for interpretation. Data from this subreddit has, for example, been used in a study by [Fogli et al. (2020)](https://doi.org/10.1098/rsos.192080) where they try to investigate the 'continuity hypothesis' meaning that dreams are a continuation of what happens in everyday life. 
 
+```{r,echo=TRUE,eval=FALSE}
+# We extract posts from the subreddit r/Dreams
+r_dreams<-find_thread_urls(subreddit = 'Dreams')
+
+# Let's see what the average number of posts per day is
+r_dreams%>%count(date_utc)%>%
+  summarise(mean_n_posts_day = 
+              mean(n,na.rm=TRUE))%>%view()
+
+# Let's compare different ways of setting the time parameter
+r_dreams_week<-find_thread_urls(subreddit = 'Dreams',
+                                period = 'week')
+
+r_dreams_all<-find_thread_urls(subreddit = 'Dreams',
+                               period = 'all')
+
+# How many comments do posts on average receive?
+r_dreams_all%>%summarise(avg_comment_count = mean(comments,na.rm=TRUE))
+
+```
+Note that the function `find_thread_urls()` has two parameters `sort_by` and `period`. Per default we get `sort_by=top` posts per `period = month`.
+
+Besides of looking at threads/posts alone, we can also get all comments that a post received. For this we can pass one or multiple URLs (i.e. links to posts) into the function `get_thread_content()`. The outcome is a list with two elements. One of these elements is a dataframe that contains all comments.
+
+```{r, echo=TRUE,eval=FALSE}
+# We can extract all comments for a certain post
+extract_comments<-get_thread_content(urls = 'https://www.reddit.com/r/Dreams/comments/l7rlpb/i_had_a_dream_i_was_attending_a_geometry_class/')
+
+# Remember that the outcome is a list with two dataframes
+# We want the second data frame called comments
+post_comments<-extract_comments$comments
+
+# extracting one column from a data frame can be done
+# with dollar notation r_dreams_all$url
+# or the pull function from dplyr  
+
+get_all_comments<-get_thread_content(urls = r_dreams_all%>%pull('url'))
+
+# We use the unnest_tokens function 
+#to get the count of the words                    
+r_dreams_all%>%
+  unnest_tokens(input = title,
+                output = word)%>%count(word,sort=TRUE)
+```
+
+## Exercise
+
+* Collect some threads from the subrreddit **r/haiku**. What are the most frequent words that appear in the poems?
+* Use the function to extract all posts from user **u/mvea**
+
+```{r,echo=TRUE,eval=FALSE}
+
+r_haiku_all<-find_thread_urls(subreddit = 'haiku',
+                               period = 'all')
+
+user_mvea<-get_user_content(users = 'mvea')
+
+```
 
