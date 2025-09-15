@@ -1,6 +1,6 @@
 ---
 title: "Data Analysis and Visualisation with R"
-subtitle: "Course Material for AAU Information Studies Fall 2024"
+subtitle: "Course Material for AAU Information Studies Fall 2025"
 page-layout: full
 ---
 
